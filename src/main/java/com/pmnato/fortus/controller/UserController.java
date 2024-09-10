@@ -1,63 +1,50 @@
 package com.pmnato.fortus.controller;
 
-import java.util.List;
-
-import com.pmnato.fortus.dto.UserDto;
-import com.pmnato.fortus.service.UserService;
+import com.pmnato.fortus.entity.User;
+import com.pmnato.fortus.exception.not_found.UserNotFoundException;
+import com.pmnato.fortus.repository.UserRepository;
+import com.pmnato.fortus.utils.PasswordChecker;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.pmnato.fortus.service.request.UserRequest;
-import com.pmnato.fortus.service.request.LoginRequest;
-import static com.pmnato.fortus.commons.constants.RestRoutes.*;
-import static com.pmnato.fortus.commons.constants.EntityRoutes.USER_ROUTE;
 
 @RestController
-@RequestMapping(USER_ROUTE)
-public class UserController extends BaseController<UserDto, UserRequest> {
+@AllArgsConstructor
+@RequestMapping("/user")
+public class UserController {
 
-    public UserController(UserService service) {
-        super(service);
+    private UserRepository repository;
+
+    @GetMapping("/all") // localhost:8080/user/all
+    public User[] getAll() {
+        return new User[]{
+                new User(1L, "John", "john@email.com", "", ""),
+                new User(2L, "Mary", "mary@email.com", "", ""),
+                new User(3L, "Paul", "paul@email.com", "", ""),
+                new User(4L, "Jesy", "jesy@email.com", "", ""),
+                new User(5L, "Kali", "kali@email.com", "", ""),
+                new User(6L, "Beny", "beny@email.com", "", ""),
+                new User(7L, "Bill", "bill@email.com", "", ""),
+                new User(8L, "Alle", "alle@email.com", "", ""),
+                new User(9L, "Vlad", "vlad@email.com", "", "")
+        };
     }
 
-    @Override
-    @PostMapping(CREATE)
-    public ResponseEntity<Long> create(@RequestBody UserRequest request) {
-        Long id = service.save(request);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+    @PostMapping("/login")
+    public ResponseEntity<String> loginTest(@RequestBody UserLoginDto data) {
+        User user = repository.//findByEmail(data.email()).orElseThrow(UserNotFoundException::new);
+                                findById(1L).orElseThrow(UserNotFoundException::new);
+
+        final boolean isPasswordCorrect = new PasswordChecker().isCorrectPassword(user, data.password());
+        if(isPasswordCorrect) {
+            return new ResponseEntity<>("Login Efetuado!", HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>("Login ou Senha incorreta", HttpStatus.UNAUTHORIZED);
     }
 
-    @Override
-    @GetMapping(ALL)
-    public ResponseEntity<List<UserDto>> getAll() {
-        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
-    }
-
-    @Override
-    @GetMapping(ID)
-    public ResponseEntity<UserDto> getById(@PathVariable long id) {
-        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
-    }
-
-    @Override
-    @PutMapping(EDIT)
-    public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody UserRequest request) {
-        service.update(id, request);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @Override
-    @DeleteMapping(DELETE)
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    @PostMapping(LOGIN)
-    public ResponseEntity<UserDto> login(@RequestBody LoginRequest request) {
-        UserService service = (UserService) this.service;
-
-        var result = service.login(request.email(), request.password());
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
+    private record UserLoginDto(String email, String password){}
 }
+
+
