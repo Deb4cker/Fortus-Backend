@@ -1,23 +1,21 @@
 package com.pmnato.fortus.entity;
 
-import com.pmnato.fortus._enum.DayOfWeek;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
-import java.time.LocalDate;
+import static com.pmnato.fortus.commons.constants.JoinColumns.USER_ID;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Training {
-    private long id;
-    private String description;
-    private LocalDate date;
-    private boolean status;
-    private long durationTimeMillis;
-    private DayOfWeek dayOfWeek;
+@Entity
+public class Training
+{
+    @Id
+    private Long id;
 
-    //private User user;
-
+    @ManyToOne
+    @JoinColumn(name = USER_ID, nullable = false)
+    @JsonBackReference
+    private User user;
 }

@@ -5,14 +5,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class BaseController {
-
     /*
-     * Essa rota é só para gerar uma homepage temporária. Não faz parte da implementação de vocês.
-     * Para ver a tela basta abrir a url padrão:
-     * http://localhost:8080/
-     */
+    * Esse classe serve só para gerar aquela home
+    * Vai ser apagada posteriormente.
+    * */
 
-    @GetMapping("/") //http://localhost:8080/
+    @GetMapping("/")
     public String home(){
         return """
                 <!DOCTYPE html>
@@ -51,5 +49,4 @@ public class BaseController {
                 </html>
                \s""";
     }
-
 }
