@@ -5,9 +5,13 @@ import com.pmnato.fortus.exception.not_found.UserNotFoundException;
 import com.pmnato.fortus.repository.UserRepository;
 import com.pmnato.fortus.utils.PasswordChecker;
 import lombok.AllArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @AllArgsConstructor
@@ -15,33 +19,33 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private UserRepository repository;
+    private static final Logger logger = LogManager.getLogger(UserController.class);
 
     @GetMapping("/all") // localhost:8080/user/all
-    public User[] getAll() {
-        return new User[]{
-                new User(1L, "John", "john@email.com", "", ""),
-                new User(2L, "Mary", "mary@email.com", "", ""),
-                new User(3L, "Paul", "paul@email.com", "", ""),
-                new User(4L, "Jesy", "jesy@email.com", "", ""),
-                new User(5L, "Kali", "kali@email.com", "", ""),
-                new User(6L, "Beny", "beny@email.com", "", ""),
-                new User(7L, "Bill", "bill@email.com", "", ""),
-                new User(8L, "Alle", "alle@email.com", "", ""),
-                new User(9L, "Vlad", "vlad@email.com", "", "")
-        };
+    public ResponseEntity<List<User>> getAll() {
+        var users = repository.findAll();
+        return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @PostMapping("/login")
     public ResponseEntity<String> loginTest(@RequestBody UserLoginDto data) {
-        User user = repository.//findByEmail(data.email()).orElseThrow(UserNotFoundException::new);
-                                findById(1L).orElseThrow(UserNotFoundException::new);
+        String message = "Login ou Senha incorreta";
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
 
-        final boolean isPasswordCorrect = new PasswordChecker().isCorrectPassword(user, data.password());
+        User user = repository.findByEmail(data.email()).orElse(returnMockUser());
+
+        final boolean isPasswordCorrect = PasswordChecker.isCorrectPassword(user, data.password());
         if(isPasswordCorrect) {
-            return new ResponseEntity<>("Login Efetuado!", HttpStatus.OK);
+            logger.info("{} logged", user.getName());
+            message = "Login Efetuado!"; status = HttpStatus.OK;
         }
 
-        return new ResponseEntity<>("Login ou Senha incorreta", HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(message, status);
+    }
+
+    private User returnMockUser(){
+        logger.info("Failed to find user by email. Returned the mock user.");
+        return new User(100L, "John", "johnzin@email.com", "senha_foda", "");
     }
 
     private record UserLoginDto(String email, String password){}
