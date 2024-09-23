@@ -2,8 +2,6 @@ package com.pmnato.fortus.dto;
 
 public record UserDto(
         Long id,
-        String firstName,
-        String midName,
-        String lastName,
+        String name,
         String email
 ) implements Dto{}

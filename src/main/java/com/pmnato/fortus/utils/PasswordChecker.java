@@ -1,7 +1,6 @@
 package com.pmnato.fortus.utils;
 
 import com.pmnato.fortus.entity.User;
-import lombok.AllArgsConstructor;
 
 public final class PasswordChecker {
     private PasswordChecker() {}

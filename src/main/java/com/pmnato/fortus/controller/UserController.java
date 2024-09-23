@@ -1,56 +1,50 @@
 package com.pmnato.fortus.controller;
 
-import com.pmnato.fortus.entity.User;
-import com.pmnato.fortus.repository.UserRepository;
-import com.pmnato.fortus.utils.PasswordChecker;
-import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+import com.pmnato.fortus.dto.UserDto;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import com.pmnato.fortus.service.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.pmnato.fortus.service.request.UserRequest;
+import com.pmnato.fortus.service.request.LoginRequest;
+import static com.pmnato.fortus.commons.constants.RestRoutes.*;
 import static com.pmnato.fortus.commons.constants.EntityRoutes.USER_ROUTE;
-import static com.pmnato.fortus.commons.constants.RestRoutes.ALL;
-import static com.pmnato.fortus.commons.constants.RestRoutes.LOGIN;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping(USER_ROUTE)
 public class UserController {
 
-    private UserRepository repository;
-    private static final Logger logger = LogManager.getLogger(UserController.class);
+    private final UserService userService;
 
-    @GetMapping(ALL) // localhost:8080/user/all
-    public ResponseEntity<List<User>> getAll() {
-        var users = repository.findAll();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+    @PostMapping(CREATE)
+    public ResponseEntity<Void> create(@RequestBody UserRequest request) {
+        userService.save(request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping(ALL)
+    public ResponseEntity<List<UserDto>> getAll() {
+        return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
+    }
+
+    @GetMapping(ID)
+    public ResponseEntity<UserDto> getById(@PathVariable long id) {
+        return new ResponseEntity<>(userService.findById(id), HttpStatus.OK);
+    }
+
+    @PutMapping(EDIT)
+    public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody UserRequest request) {
+        userService.update(id, request);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping(LOGIN)
-    public ResponseEntity<String> loginTest(@RequestBody UserLoginDto data) {
-        String message = "Login ou Senha incorreta";
-        HttpStatus status = HttpStatus.UNAUTHORIZED;
-
-        User user = repository.findByEmail(data.email()).orElse(returnMockUser());
-
-        final boolean isPasswordCorrect = PasswordChecker.isCorrectPassword(user, data.password());
-        if(isPasswordCorrect) {
-            logger.info("{} logged", user.getName());
-            message = "Login Efetuado!"; status = HttpStatus.OK;
-        }
-
-        return new ResponseEntity<>(message, status);
+    public ResponseEntity<Void> login(@RequestBody LoginRequest request) {
+        userService.login(request.email(), request.password());
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
-
-    private User returnMockUser(){
-        logger.info("Failed to find user by email. Returned the mock user.");
-        return new User(100L, "John", "johnzin@email.com", "senha_foda", "");
-    }
-
-    private record UserLoginDto(String email, String password){}
 }
-
-
