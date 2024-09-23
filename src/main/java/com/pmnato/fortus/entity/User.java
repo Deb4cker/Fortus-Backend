@@ -1,6 +1,7 @@
 package com.pmnato.fortus.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.pmnato.fortus.service.request.UserRequest;
 import com.pmnato.fortus.utils.Encryptor;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,16 @@ public class User
         this.id = id;
         this.email = email;
         this.name = name;
+
+        var encryptData = Encryptor.getEncryptData(password);
+
+        this.password = encryptData.hash();
+        this.salt = encryptData.salt();
+    }
+
+    public User(UserRequest registerRequest) {
+        this.email = registerRequest.email();
+        this.name = registerRequest.name();
 
         var encryptData = Encryptor.getEncryptData(password);
 
