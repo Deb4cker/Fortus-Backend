@@ -27,7 +27,9 @@ public class User
     @Id //para o JPA identificar que esse atributo é o id
     @GeneratedValue(strategy = GenerationType.AUTO)  //valor gerado: estratégia automática
     private Long id;
-    private String name;
+    private String firstName;
+    private String midName;
+    private String lastName;
     private String email;
     private String password;
     private String salt;

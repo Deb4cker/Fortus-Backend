@@ -37,7 +37,7 @@ public class UserService {
 
     public UserDto findById(Long id) {
         User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
-        return new UserDto(user.getId(), user.getName(), user.getEmail());
+        return mapToDto(user);
     }
 
     public Long save(UserRequest request) {
@@ -46,19 +46,9 @@ public class UserService {
         boolean valid = validator.isValid();
 
         if (valid) {
-            var encryptData = Encryptor.getEncryptData(request.password());
-            User user = new User(
-                null,
-                request.name(),
-                request.email(),
-                encryptData.hashedPassword(),
-                encryptData.salt(),
-                new ArrayList<>()
-            );
-
+            User user = constructUser(request);
             user = repository.save(user);
-            logger.info("{} registrou-se no sistema. (id={})", user.getName(), user.getId());
-
+            logger.info("{} {} registrou-se no sistema. (id={})", user.getFirstName(), user.getLastName(), user.getId());
             return user.getId();
         }
 
@@ -71,11 +61,7 @@ public class UserService {
         boolean valid = validator.isValid();
         if (valid) {
             User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
-            EncryptedInputData secretData = Encryptor.getEncryptData(request.password());
-            user.setEmail(request.email());
-            user.setName(request.name());
-            user.setPassword(secretData.hashedPassword());
-            user.setSalt(secretData.salt());
+            setData(user, request);
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
@@ -93,24 +79,50 @@ public class UserService {
         boolean isPasswordCorrect = PasswordChecker.isCorrectPassword(user, password);
 
         if(isPasswordCorrect) {
-            logger.info("{} logged", user.getName());
-            return new UserDto(
-                    user.getId(),
-                    user.getName(),
-                    user.getEmail()
-            );
+            logger.info("{} {} (id={})logged", user.getFirstName(), user.getLastName(), user.getId());
+            return mapToDto(user);
         }
 
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Falha no login!");
     }
 
     private UserDto mapToDto(User user) {
-        return new UserDto(user.getId(), user.getName(), user.getEmail());
+        return new UserDto(
+                user.getId(),
+                user.getFirstName(),
+                user.getMidName(),
+                user.getLastName(),
+                user.getEmail()
+        );
+    }
+
+    private void setData(User user, UserRequest request){
+        EncryptedInputData secretData = Encryptor.getEncryptData(request.password());
+        user.setEmail(request.email());
+        user.setFirstName(request.firstName());
+        user.setMidName(request.midName());
+        user.setFirstName(request.lastName());
+        user.setPassword(secretData.hashedPassword());
+        user.setSalt(secretData.salt());
+    }
+
+    private User constructUser(UserRequest request) {
+        var encryptData = Encryptor.getEncryptData(request.password());
+        return new User(
+                null,
+                request.firstName(),
+                null,
+                request.lastName(),
+                request.email(),
+                encryptData.hashedPassword(),
+                encryptData.salt(),
+                new ArrayList<>()
+        );
     }
 
     private User returnMockUser(){
         logger.info("Failed to find user by email. Returned the mock user.");
-        return new User(100L, "John", "johnzin@email.com", "senha_foda", "", new ArrayList<>());
+        return new User(100L, "John", "Hanry", "Bills", "johnzin@email.com", "senha_foda", "", new ArrayList<>());
     }
 }
 
