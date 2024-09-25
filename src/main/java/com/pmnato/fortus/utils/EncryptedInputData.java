@@ -1,3 +1,3 @@
 package com.pmnato.fortus.utils;
 
-public record EncryptedInputData(String salt, String hash) { }
+public record EncryptedInputData(String salt, String hashedPassword) { }
