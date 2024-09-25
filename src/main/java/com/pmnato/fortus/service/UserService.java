@@ -43,12 +43,12 @@ public class UserService {
     public Long save(UserRequest request) {
         var validator = new UserValidator(repository);
         validator.setRequest(request);
-        boolean valid = validator.isValid();
+        boolean valid = validator.isValidCreation();
 
         if (valid) {
             User user = constructUser(request);
             user = repository.save(user);
-            logger.info("{} {} registrou-se no sistema. (id={})", user.getFirstName(), user.getLastName(), user.getId());
+            logger.info("{} {} registered in the system. (id={})", user.getFirstName(), user.getLastName(), user.getId());
             return user.getId();
         }
 
@@ -62,6 +62,8 @@ public class UserService {
         if (valid) {
             User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
             setData(user, request);
+            repository.save(user);
+            return;
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
@@ -75,15 +77,15 @@ public class UserService {
     }
 
     public UserDto login(String email, String password) {
-        User user = repository.findByEmail(email).orElse(returnMockUser());
+        User user = repository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         boolean isPasswordCorrect = PasswordChecker.isCorrectPassword(user, password);
 
         if(isPasswordCorrect) {
-            logger.info("{} {} (id={})logged", user.getFirstName(), user.getLastName(), user.getId());
+            logger.info("{} {} (id={}) logged.", user.getFirstName(), user.getLastName(), user.getId());
             return mapToDto(user);
         }
 
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Falha no login!");
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login fail!");
     }
 
     private UserDto mapToDto(User user) {
@@ -111,18 +113,13 @@ public class UserService {
         return new User(
                 null,
                 request.firstName(),
-                null,
+                request.midName(),
                 request.lastName(),
                 request.email(),
                 encryptData.hashedPassword(),
                 encryptData.salt(),
                 new ArrayList<>()
         );
-    }
-
-    private User returnMockUser(){
-        logger.info("Failed to find user by email. Returned the mock user.");
-        return new User(100L, "John", "Hanry", "Bills", "johnzin@email.com", "senha_foda", "", new ArrayList<>());
     }
 }
 

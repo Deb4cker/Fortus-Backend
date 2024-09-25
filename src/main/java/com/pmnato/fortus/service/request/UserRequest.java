@@ -1,7 +1,6 @@
 package com.pmnato.fortus.service.request;
 
 public record UserRequest(
-        Long   id,
         String firstName,
         String midName,
         String lastName,

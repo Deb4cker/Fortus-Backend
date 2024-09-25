@@ -5,9 +5,11 @@ import com.pmnato.fortus.exception.not_found.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.pmnato.fortus.commons.constants.EntityName.USER;
 
+@RestControllerAdvice
 public class NotFoundExceptionHandler extends ApplicationExceptionHandler{
 
     @ExceptionHandler(UserNotFoundException.class)
@@ -43,5 +45,5 @@ public class NotFoundExceptionHandler extends ApplicationExceptionHandler{
                 HttpStatus.NOT_FOUND);
     }
 
-    private final String BASE_MESSAGE = " does not exist in the system.";
+    private static final String BASE_MESSAGE = " does not exists.";
 }

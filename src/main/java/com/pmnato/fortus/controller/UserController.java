@@ -56,6 +56,6 @@ public class UserController extends BaseController<UserDto, UserRequest> {
     @PostMapping(LOGIN)
     public ResponseEntity<UserDto> login(@RequestBody LoginRequest request) {
         var result = userService.login(request.email(), request.password());
-        return new ResponseEntity<>(result, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 }
