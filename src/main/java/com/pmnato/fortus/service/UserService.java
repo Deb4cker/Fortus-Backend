@@ -1,9 +1,11 @@
 package com.pmnato.fortus.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -38,15 +40,26 @@ public class UserService {
         return new UserDto(user.getId(), user.getName(), user.getEmail());
     }
 
-    public void save(UserRequest request) {
+    public Long save(UserRequest request) {
         var validator = new UserValidator(repository);
         validator.setRequest(request);
         boolean valid = validator.isValid();
 
         if (valid) {
-            User user = new User(request);
+            var encryptData = Encryptor.getEncryptData(request.password());
+            User user = new User(
+                null,
+                request.name(),
+                request.email(),
+                encryptData.hashedPassword(),
+                encryptData.salt(),
+                new ArrayList<>()
+            );
+
             user = repository.save(user);
-            logger.info("{} registrou-se no sistema.", user.getName());
+            logger.info("{} registrou-se no sistema. (id={})", user.getName(), user.getId());
+
+            return user.getId();
         }
 
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
@@ -61,10 +74,18 @@ public class UserService {
             EncryptedInputData secretData = Encryptor.getEncryptData(request.password());
             user.setEmail(request.email());
             user.setName(request.name());
-            user.setPassword(secretData.hash());
+            user.setPassword(secretData.hashedPassword());
             user.setSalt(secretData.salt());
         }
         throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
+
+    public void delete(Long id) {
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new UserNotFoundException();
+        }
     }
 
     public UserDto login(String email, String password) {
@@ -89,7 +110,7 @@ public class UserService {
 
     private User returnMockUser(){
         logger.info("Failed to find user by email. Returned the mock user.");
-        return new User(100L, "John", "johnzin@email.com", "senha_foda", "");
+        return new User(100L, "John", "johnzin@email.com", "senha_foda", "", new ArrayList<>());
     }
 }
 
