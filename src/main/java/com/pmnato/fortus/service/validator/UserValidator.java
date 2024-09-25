@@ -12,7 +12,10 @@ public class UserValidator implements Validator<UserRequest> {
 
     @Override
     public boolean isValid() {
-        return nameIsValid() && lastNameIsValid() && emailIsValid() && passwordIsValid();
+        return nameIsValid(request.firstName()) &&
+               nameIsValid(request.lastName())  &&
+               emailIsValid() &&
+               passwordIsValid();
     }
 
     @Override
@@ -20,12 +23,8 @@ public class UserValidator implements Validator<UserRequest> {
         this.request = request;
     }
 
-    private boolean nameIsValid() {
-        return request.firstName() != null && !request.firstName().trim().isEmpty();
-    }
-
-    private boolean lastNameIsValid() {
-        return request.lastName() != null && !request.lastName().trim().isEmpty();
+    private boolean nameIsValid(String name) {
+        return name != null && !name.trim().isEmpty();
     }
 
     private boolean emailIsValid() {
