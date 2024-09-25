@@ -34,15 +34,15 @@ public class TestConfiguration implements CommandLineRunner
         
         final String password = "senha_foda";
         var testUsers = new User[]{
-                new User(null, "John", "john@email.com", password, "", new ArrayList<>()),
-                new User(null, "Mary", "mary@email.com", password, "", new ArrayList<>()),
-                new User(null, "Paul", "paul@email.com", password, "", new ArrayList<>()),
-                new User(null, "Jesy", "jesy@email.com", password, "", new ArrayList<>()),
-                new User(null, "Kali", "kali@email.com", password, "", new ArrayList<>()),
-                new User(null, "Beny", "beny@email.com", password, "", new ArrayList<>()),
-                new User(null, "Bill", "bill@email.com", password, "", new ArrayList<>()),
-                new User(null, "Alle", "alle@email.com", password, "", new ArrayList<>()),
-                new User(null, "Vlad", "vlad@email.com", password, "", new ArrayList<>())
+                new User(null, "John", null, "Green", "john@email.com", password, "", new ArrayList<>()),
+                new User(null, "Mary", null, "Brown", "mary@email.com", password, "", new ArrayList<>()),
+                new User(null, "Paul", null, "Harry", "paul@email.com", password, "", new ArrayList<>()),
+                new User(null, "Jesy", null, "Banfs", "jesy@email.com", password, "", new ArrayList<>()),
+                new User(null, "Kali", null, "Dalts", "kali@email.com", password, "", new ArrayList<>()),
+                new User(null, "Beny", null, "Doans", "beny@email.com", password, "", new ArrayList<>()),
+                new User(null, "Bill", null, "Gatsb", "bill@email.com", password, "", new ArrayList<>()),
+                new User(null, "Alle", null, "Fiell", "alle@email.com", password, "", new ArrayList<>()),
+                new User(null, "Vlad", null, "Stavs", "vlad@email.com", password, "", new ArrayList<>())
         };
 
         for (User user : testUsers){
@@ -50,7 +50,7 @@ public class TestConfiguration implements CommandLineRunner
             user.setPassword(encryptData.hashedPassword());
             user.setSalt(encryptData.salt());
 
-            logger.info("User {} generated.", user.getName());
+            logger.info("User {} {} generated.", user.getFirstName(), user.getLastName());
         }
 
         logger.info("Saving users...");
