@@ -11,11 +11,13 @@ public class UserValidator implements Validator<UserRequest> {
     private final UserRepository userRepository;
 
     @Override
+    public boolean isValidCreation() {
+        return isValid() && !emailAlreadyExists();
+    }
+
+    @Override
     public boolean isValid() {
-        return nameIsValid(request.firstName()) &&
-               nameIsValid(request.lastName())  &&
-               emailIsValid() &&
-               passwordIsValid();
+        return nameIsValid(request.firstName()) && nameIsValid(request.lastName())  && emailIsValid() && passwordIsValid();
     }
 
     @Override
@@ -29,7 +31,6 @@ public class UserValidator implements Validator<UserRequest> {
 
     private boolean emailIsValid() {
         return request.email() != null
-           &&  !emailAlreadyExists()
            && !request.email().trim().isEmpty()
            &&  request.email().contains("@");
     }
@@ -42,6 +43,6 @@ public class UserValidator implements Validator<UserRequest> {
     }
 
     private boolean emailAlreadyExists() {
-        return userRepository.findByEmail(request.email()).isEmpty();
+        return userRepository.findByEmail(request.email()).isPresent();
     }
 }
