@@ -26,6 +26,6 @@ public class AuthExceptionHandler extends ApplicationExceptionHandler {
         return getObjectResponseEntity(
                 exception.getMessage(),
                 cause,
-                HttpStatus.FORBIDDEN);
+                HttpStatus.UNAUTHORIZED);
     }
 }
