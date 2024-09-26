@@ -1,4 +1,4 @@
-package com.pmnato.fortus.exception.security_error;
+package com.pmnato.fortus.exception.security;
 
 import com.pmnato.fortus.exception.ApplicationException;
 
