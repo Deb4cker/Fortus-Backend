@@ -1,16 +1,16 @@
 package com.pmnato.fortus.service.validator;
 
 import com.pmnato.fortus.exception.validation.ValidationException;
+import com.pmnato.fortus.service.request.Request;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 
-public abstract class AbstractValidator<R> implements Validator<R> {
-
-    private static final Logger logger = LogManager.getLogger(AbstractValidator.class);
+public abstract class AbstractValidator<R extends Request> implements Validator<R> {
 
     protected R request;
+    protected static final Logger logger = LogManager.getLogger(AbstractValidator.class);
 
     protected AbstractValidator(R request) {
         this.request = request;

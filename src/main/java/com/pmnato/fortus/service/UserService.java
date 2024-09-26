@@ -42,10 +42,8 @@ public class UserService {
 
     public Long save(UserRequest request) {
         var validator = new UserValidator(request, repository);
-        validator.setRequest(request);
-        boolean valid = validator.isValidCreation();
 
-        if (valid) {
+        if (validator.isValidCreation()) {
             User user = constructUser(request);
             user = repository.save(user);
             logger.info("{} {} registered in the system. (id={})", user.getFirstName(), user.getLastName(), user.getId());
@@ -57,14 +55,14 @@ public class UserService {
 
     public void update(Long id, UserRequest request){
         var validator = new UserValidator(request, repository);
-        validator.setRequest(request);
-        boolean valid = validator.isValid();
-        if (valid) {
+
+        if (validator.isValid()) {
             User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
             setData(user, request);
             repository.save(user);
             return;
         }
+
         throw new ValidationException();
     }
 
