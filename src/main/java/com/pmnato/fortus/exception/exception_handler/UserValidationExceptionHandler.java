@@ -1,8 +1,6 @@
 package com.pmnato.fortus.exception.exception_handler;
 
 import com.pmnato.fortus.exception.ApplicationException;
-import com.pmnato.fortus.exception.auth_exception.AuthException;
-import com.pmnato.fortus.exception.validation.ValidationException;
 import com.pmnato.fortus.exception.validation.user.EmailAlreadyInUseException;
 import com.pmnato.fortus.exception.validation.user.InvalidEmailException;
 import com.pmnato.fortus.exception.validation.user.InvalidNameException;
@@ -14,11 +12,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class UserValidationExceptionHandler extends ApplicationExceptionHandler {
-
-    @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<Object> handleAuthException(AuthException ex) {
-        return treatedResponse(ex, "Validation Failed.");
-    }
 
     @ExceptionHandler(EmailAlreadyInUseException.class)
     public ResponseEntity<Object> handleEmailAlreadyExistsException(EmailAlreadyInUseException ex) {
