@@ -3,7 +3,7 @@ package com.pmnato.fortus.exception.exception_handler;
 import com.pmnato.fortus.exception.ApplicationException;
 import com.pmnato.fortus.exception.auth_exception.AuthException;
 import com.pmnato.fortus.exception.validation.ValidationException;
-import com.pmnato.fortus.exception.validation.user.EmailAlreadyExists;
+import com.pmnato.fortus.exception.validation.user.EmailAlreadyInUseException;
 import com.pmnato.fortus.exception.validation.user.InvalidEmailException;
 import com.pmnato.fortus.exception.validation.user.InvalidNameException;
 import com.pmnato.fortus.exception.validation.user.InvalidPasswordException;
@@ -20,8 +20,8 @@ public class UserValidationExceptionHandler extends ApplicationExceptionHandler 
         return treatedResponse(ex, "Validation Failed.");
     }
 
-    @ExceptionHandler(EmailAlreadyExists.class)
-    public ResponseEntity<Object> handleEmailAlreadyExistsException(EmailAlreadyExists ex) {
+    @ExceptionHandler(EmailAlreadyInUseException.class)
+    public ResponseEntity<Object> handleEmailAlreadyExistsException(EmailAlreadyInUseException ex) {
         return treatedResponse(ex, "Invalid email address.");
     }
 

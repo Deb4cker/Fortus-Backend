@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pmnato.fortus.exception.auth_exception.PasswordDoesNotMatchException;
+import com.pmnato.fortus.exception.validation.ValidationException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.pmnato.fortus.dto.UserDto;
 import com.pmnato.fortus.entity.User;
@@ -42,7 +41,7 @@ public class UserService {
     }
 
     public Long save(UserRequest request) {
-        var validator = new UserValidator(repository);
+        var validator = new UserValidator(request, repository);
         validator.setRequest(request);
         boolean valid = validator.isValidCreation();
 
@@ -53,11 +52,11 @@ public class UserService {
             return user.getId();
         }
 
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        throw new ValidationException();
     }
 
     public void update(Long id, UserRequest request){
-        var validator = new UserValidator(repository);
+        var validator = new UserValidator(request, repository);
         validator.setRequest(request);
         boolean valid = validator.isValid();
         if (valid) {
@@ -66,7 +65,7 @@ public class UserService {
             repository.save(user);
             return;
         }
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        throw new ValidationException();
     }
 
     public void delete(Long id) {
