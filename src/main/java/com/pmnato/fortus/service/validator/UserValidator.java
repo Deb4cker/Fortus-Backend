@@ -9,7 +9,6 @@ import com.pmnato.fortus.service.request.UserRequest;
 
 public class UserValidator extends AbstractValidator<UserRequest> {
 
-    private UserRequest request;
     private final UserRepository userRepository;
 
     public UserValidator(UserRequest request, UserRepository userRepository) {
@@ -25,11 +24,6 @@ public class UserValidator extends AbstractValidator<UserRequest> {
     @Override
     public boolean isValid() {
         return nameIsValid(request.firstName()) && nameIsValid(request.lastName())  && emailIsValid() && passwordIsValid();
-    }
-
-    @Override
-    public void setRequest(UserRequest request) {
-        this.request = request;
     }
 
     private boolean nameIsValid(String name) {
@@ -55,6 +49,6 @@ public class UserValidator extends AbstractValidator<UserRequest> {
 
     private boolean emailAlreadyInUse() {
         boolean exists = userRepository.findByEmail(request.email()).isPresent();
-        return executePredicate(exists, EmailAlreadyInUseException.class);
+        return executePredicate(!exists, EmailAlreadyInUseException.class);
     }
 }
