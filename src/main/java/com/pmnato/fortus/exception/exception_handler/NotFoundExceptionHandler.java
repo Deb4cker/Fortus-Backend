@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import static com.pmnato.fortus.commons.constants.EntityName.CAPITALIZED_USER;
 import static com.pmnato.fortus.commons.constants.EntityName.USER;
 
 @RestControllerAdvice
@@ -14,7 +15,7 @@ public class NotFoundExceptionHandler extends ApplicationExceptionHandler{
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
-        return treatedResponse(ex, USER + BASE_MESSAGE);
+        return treatedResponse(ex, CAPITALIZED_USER + BASE_MESSAGE);
     }
     /*
         @ExceptionHandler(UserDataNotFoundException.class)

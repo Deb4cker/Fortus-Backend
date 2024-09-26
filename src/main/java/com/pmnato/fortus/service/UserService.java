@@ -3,6 +3,7 @@ package com.pmnato.fortus.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pmnato.fortus.exception.auth_exception.PasswordDoesNotMatchException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -85,7 +86,7 @@ public class UserService {
             return mapToDto(user);
         }
 
-        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Login fail!");
+        throw new PasswordDoesNotMatchException();
     }
 
     private UserDto mapToDto(User user) {
