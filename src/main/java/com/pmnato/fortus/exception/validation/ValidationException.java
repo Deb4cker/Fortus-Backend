@@ -6,4 +6,8 @@ public class ValidationException extends ApplicationException {
     public ValidationException(String message) {
         super(message);
     }
+
+    public ValidationException() {
+        super("One or many Validation Error(s) Occurred.");
+    }
 }
