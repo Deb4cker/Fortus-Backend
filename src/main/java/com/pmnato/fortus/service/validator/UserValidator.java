@@ -49,6 +49,6 @@ public class UserValidator extends AbstractValidator<UserRequest> {
 
     private boolean emailAlreadyInUse() {
         boolean exists = userRepository.findByEmail(request.email()).isPresent();
-        return executePredicate(!exists, EmailAlreadyInUseException.class);
+        return !executePredicate(!exists, EmailAlreadyInUseException.class);
     }
 }
