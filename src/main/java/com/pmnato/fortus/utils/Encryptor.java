@@ -1,6 +1,6 @@
 package com.pmnato.fortus.utils;
 
-import com.pmnato.fortus.exception.security_error.SecurityException;
+import com.pmnato.fortus.exception.security.SecurityException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
