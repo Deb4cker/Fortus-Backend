@@ -3,15 +3,12 @@ package com.pmnato.fortus.entity;
 import com.pmnato.fortus._enum.Difficulty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
+@Entity
 @AllArgsConstructor
-@NoArgsConstructor
-
 public class Exercise {
-
-    private long id;
+    private Long id;
 
     private String name;
 
@@ -25,6 +22,4 @@ public class Exercise {
 
     private String VideoUrl;
 
-    //private long equipmentId;
-    //private long categoryId;
 }
