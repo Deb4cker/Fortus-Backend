@@ -1,6 +1,5 @@
 package com.pmnato.fortus.service;
 
-import com.pmnato.fortus.commons._interface.IService;
 import com.pmnato.fortus.dto.EquipmentDto;
 import com.pmnato.fortus.entity.Equipment;
 import com.pmnato.fortus.exception.not_found.EquipmentNotFoundException;
@@ -16,15 +15,15 @@ import java.util.logging.Logger;
 
 @Service
 @AllArgsConstructor
-public class EquipmentService implements IService<EquipmentDto, EquipmentRequest> {
+public class EquipmentService {
         private final EquipmentRepository repository;
+        private static final Logger logger = (Logger) LogManager.getLogger(EquipmentService.class);
 
         public List<EquipmentDto> findAll() {
             return repository.findAll().stream()
                     .map(this::mapToDto)
                     .toList();
         }
-
         public EquipmentDto findById(Long id) {
             Equipment equipment = repository.findById(id).orElseThrow(EquipmentNotFoundException::new);
             return mapToDto(equipment);
