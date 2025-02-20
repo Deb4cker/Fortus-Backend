@@ -1,29 +1,54 @@
 package com.pmnato.fortus.controller;
 
-import com.pmnato.fortus.entity.Equipment;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.pmnato.fortus.dto.EquipmentDto;
+import com.pmnato.fortus.service.EquipmentService;
+import com.pmnato.fortus.service.request.EquipmentRequest;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+import static com.pmnato.fortus.commons.constants.EntityRoutes.EQUIPMENT_ROUTE;
+import static com.pmnato.fortus.commons.constants.RestRoutes.*;
 
 @RestController
-public class EquipmentController {
-    @GetMapping("equipment/all")
-    public Equipment[] getAll() {
-        return new Equipment[]{
-                new Equipment(1, "Barra", 10, ";ImageUrl"),
-                new Equipment(2, "Haletere 5", 5, ";ImageUrl"),
-                new Equipment(3, "Haletere 10", 10, ";ImageUrl"),
-                new Equipment(4, "Haletere 15", 15, ";ImageUrl"),
-                new Equipment(5, "Haletere 20", 20, ";ImageUrl"),
-                new Equipment(6, "Haletere 25", 25, ";ImageUrl"),
-                new Equipment(7, "Haletere 30", 30, ";ImageUrl"),
-                new Equipment(8, "Voador", 0, ";ImageUrl"),
-                new Equipment(9, "Hack", 0, ";ImageUrl"),
-                new Equipment(10, "Polia", 0, ";ImageUrl"),
-                new Equipment(11, "Banco", 5, ";ImageUrl"),
+@AllArgsConstructor
+@RequestMapping(EQUIPMENT_ROUTE)
+public class EquipmentController extends BaseController<EquipmentDto, EquipmentRequest> {
 
+    private final EquipmentService equipmentService;
 
-        };
+    @Override
+    @GetMapping(ALL)
+    public ResponseEntity<List<EquipmentDto>> getAll(){
+        return new ResponseEntity<>(equipmentService.findAll(), HttpStatus.OK);
+    }
+
+    @Override
+    @PostMapping(CREATE)
+    public ResponseEntity<Long> create(@RequestBody EquipmentRequest request) {
+        Long id = equipmentService.save(request);
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
+    @Override
+    @GetMapping(ID)
+    public ResponseEntity<EquipmentDto> getById(@PathVariable long id) {
+        return new ResponseEntity<>(equipmentService.findById(id), HttpStatus.OK);
+    }
+    @Override
+    @PutMapping(EDIT)
+    public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody EquipmentRequest request) {
+        equipmentService.update(id, request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    @DeleteMapping(DELETE)
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        equipmentService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
-
-
