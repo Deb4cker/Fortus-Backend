@@ -1,6 +1,5 @@
 package com.pmnato.fortus.service;
 
-import com.pmnato.fortus.commons._interface.IService;
 import com.pmnato.fortus.dto.TrainingDto;
 import com.pmnato.fortus.entity.Training;
 import com.pmnato.fortus.exception.not_found.TrainingNotFoundException;
@@ -16,8 +15,9 @@ import java.util.logging.Logger;
 
 @Service
 @AllArgsConstructor
-public class TrainingService implements IService<TrainingDto, TrainingRequest> {
+public class TrainingService {
     private final TrainingRepository repository;
+    private static final Logger logger = (Logger) LogManager.getLogger(TrainingService.class);
 
     public List<TrainingDto> findAll() {
         return repository.findAll().stream()

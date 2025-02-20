@@ -14,7 +14,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Data
@@ -36,4 +35,7 @@ public class Training
     @JoinColumn(name = USER_ID, nullable = false)
     @JsonBackReference
     private User user;
+
+    public Training(String description, LocalDate date, boolean status, long l, DayOfWeek dayOfWeek) {
+    }
 }
