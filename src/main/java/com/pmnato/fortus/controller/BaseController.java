@@ -1,23 +1,34 @@
 package com.pmnato.fortus.controller;
 
+import com.pmnato.fortus.commons._interface.IService;
 import com.pmnato.fortus.dto.Dto;
 import com.pmnato.fortus.service.request.ExerciseRequest;
 import com.pmnato.fortus.service.request.Request;
 import com.pmnato.fortus.service.request.UserRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.pmnato.fortus.commons.constants.RestRoutes.CREATE;
 import static com.pmnato.fortus.commons.constants.RestRoutes.EDIT;
 
 public abstract class BaseController<T extends Dto, R extends Request> {
+
+    protected IService<T, R> service;
+
+
 
     public abstract ResponseEntity<List<T>> getAll();
 
     public abstract ResponseEntity<T> getById(@PathVariable long id);
 
-    public abstract ResponseEntity<Long> create(@RequestBody R request);
+    @PostMapping(CREATE)
+    public ResponseEntity<Long> create(@RequestBody R request) {
+        Long id = service.save(request);
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
 
     public abstract ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody R request);
 
