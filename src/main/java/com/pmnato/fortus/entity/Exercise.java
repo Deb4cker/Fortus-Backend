@@ -1,6 +1,7 @@
 package com.pmnato.fortus.entity;
 
 import com.pmnato.fortus._enum.Difficulty;
+import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
