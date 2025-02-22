@@ -1,15 +1,22 @@
 package com.pmnato.fortus.controller;
 
 import com.pmnato.fortus.dto.TrainingDto;
+import com.pmnato.fortus.service.TrainingService;
 import com.pmnato.fortus.service.request.TrainingRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import static com.pmnato.fortus.commons.constants.EntityRoutes.TRAINING_ROUTE;
+
 @RestController
+@RequestMapping(TRAINING_ROUTE)
 public class TrainingController extends BaseController<TrainingDto, TrainingRequest> {
+
+    public TrainingController(TrainingService service) {super(service);}
 
     @Override
     public ResponseEntity<List<TrainingDto>> getAll() {

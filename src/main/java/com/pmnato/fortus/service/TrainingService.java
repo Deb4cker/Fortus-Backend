@@ -18,7 +18,6 @@ import java.util.logging.Logger;
 @AllArgsConstructor
 public class TrainingService implements IService<TrainingDto, TrainingRequest> {
     private final TrainingRepository repository;
-    private static final Logger logger = (Logger) LogManager.getLogger(TrainingService.class);
 
     public List<TrainingDto> findAll() {
         return repository.findAll().stream()
