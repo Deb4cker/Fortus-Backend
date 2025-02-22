@@ -1,6 +1,7 @@
 package com.pmnato.fortus.controller;
 
 import com.pmnato.fortus.dto.EquipmentDto;
+import com.pmnato.fortus.service.EquipmentService;
 import com.pmnato.fortus.service.request.EquipmentRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ import static com.pmnato.fortus.commons.constants.RestRoutes.*;
 @RestController
 @RequestMapping(EQUIPMENT_ROUTE)
 public class EquipmentController extends BaseController<EquipmentDto, EquipmentRequest> {
+
+    public EquipmentController(EquipmentService service) {super(service);}
 
     @Override
     @GetMapping(ALL)

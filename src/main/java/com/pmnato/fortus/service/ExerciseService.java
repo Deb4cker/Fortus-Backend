@@ -18,7 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
     private final ExerciseRepository repository;
-    private static final Logger logger = LogManager.getLogger(ExerciseService.class);
 
     public List<ExerciseDto> findAll() {
         return repository.findAll().stream()
