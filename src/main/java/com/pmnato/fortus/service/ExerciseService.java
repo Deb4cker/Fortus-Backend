@@ -1,5 +1,6 @@
 package com.pmnato.fortus.service;
 
+import com.pmnato.fortus.commons._interface.IService;
 import com.pmnato.fortus.dto.ExerciseDto;
 import com.pmnato.fortus.entity.Exercise;
 import com.pmnato.fortus.repository.ExerciseRepository;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class ExerciseService {
+public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
     private final ExerciseRepository repository;
     private static final Logger logger = LogManager.getLogger(ExerciseService.class);
 
