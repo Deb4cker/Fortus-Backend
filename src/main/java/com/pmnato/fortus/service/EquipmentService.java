@@ -18,13 +18,13 @@ import java.util.logging.Logger;
 @AllArgsConstructor
 public class EquipmentService implements IService<EquipmentDto, EquipmentRequest> {
         private final EquipmentRepository repository;
-        private static final Logger logger = (Logger) LogManager.getLogger(EquipmentService.class);
 
         public List<EquipmentDto> findAll() {
             return repository.findAll().stream()
                     .map(this::mapToDto)
                     .toList();
         }
+
         public EquipmentDto findById(Long id) {
             Equipment equipment = repository.findById(id).orElseThrow(EquipmentNotFoundException::new);
             return mapToDto(equipment);

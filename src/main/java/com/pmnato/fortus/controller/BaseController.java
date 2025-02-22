@@ -3,6 +3,7 @@ package com.pmnato.fortus.controller;
 import com.pmnato.fortus.commons._interface.IService;
 import com.pmnato.fortus.dto.Dto;
 import com.pmnato.fortus.service.request.Request;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +12,10 @@ import java.util.List;
 
 import static com.pmnato.fortus.commons.constants.RestRoutes.*;
 
+@AllArgsConstructor
 public abstract class BaseController<TDto extends Dto, TRequest extends Request> {
 
-    protected IService<TDto, TRequest> service;
+    protected final IService<TDto, TRequest> service;
 
     @GetMapping(ALL)
     public ResponseEntity<List<TDto>> getAll(){
