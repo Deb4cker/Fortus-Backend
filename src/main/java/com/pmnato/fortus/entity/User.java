@@ -1,19 +1,31 @@
 package com.pmnato.fortus.entity;
 
-import jakarta.persistence.*;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import static com.pmnato.fortus.commons.constants.EntityName.USER;
+import static com.pmnato.fortus.commons.constants.EntityName.USERS;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-
-@Entity
-@Table(name = "users")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+@Table(name = USERS)
+public class User
+{
+    @Id //para o JPA identificar que esse atributo é o id
+    @GeneratedValue(strategy = GenerationType.AUTO)  //valor gerado: estratégia automática
     private Long id;
 
     private String firstName;
@@ -22,4 +34,8 @@ public class User {
     private String email;
     private String password;
     private String salt;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy=USER)
+    @JsonManagedReference
+    private List<Training> trainings;
 }
