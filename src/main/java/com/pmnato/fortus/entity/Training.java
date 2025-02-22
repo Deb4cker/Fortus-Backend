@@ -11,7 +11,7 @@ import com.pmnato.fortus._enum.DayOfWeek;
 
 import static com.pmnato.fortus.commons.constants.EntityName.TRAINING;
 import static com.pmnato.fortus.commons.constants.EntityName.USER;
-import static com.pmnato.fortus.commons.constants.JoinColumns.USER_ID;
+import static com.pmnato.fortus.commons.constants.JoinColumns.*;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +26,7 @@ public class Training
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     private String description;
     private LocalDate date;
     private boolean status;
@@ -38,9 +38,8 @@ public class Training
     @JsonBackReference
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy=TRAINING)
-    @JsonManagedReference
-    private List<Exercise> exercises;
+    @OneToMany(mappedBy = TRAINING, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TrainingExercise> trainingExercises;
 
     public Training(String description, LocalDate date, boolean status, long l, DayOfWeek dayOfWeek) {
     }
