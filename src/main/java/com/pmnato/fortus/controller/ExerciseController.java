@@ -1,25 +1,40 @@
 package com.pmnato.fortus.controller;
 
-import com.pmnato.fortus._enum.Difficulty;
-import com.pmnato.fortus.entity.Exercise;
-import org.springframework.web.bind.annotation.GetMapping;
+import com.pmnato.fortus.dto.ExerciseDto;
+import com.pmnato.fortus.service.request.ExerciseRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
-public class ExerciseController {
-    @GetMapping("exercise/all")
-    public Exercise[] getAll(){
-        return new Exercise[]{
-                new Exercise(1, "Supino reto", Difficulty.MEDIUM, 12, "1:30", "ImageUrl", "VideoUrl"),
-                new Exercise(2, "Agachamento Hack", Difficulty.HARD, 8, "1:30", "ImageUrl", "VideoUrl"),
-                new Exercise(3, "Rosca alternada Halteres", Difficulty.EASY, 12, "1:30", "ImageUrl", "VideoUrl"),
-                new Exercise(4, "Agachamento bulgaro", Difficulty.HARD, 6, "1:30", "ImageUrl", "VideoUrl"),
-                new Exercise(5, "Puxada alta", Difficulty.MEDIUM, 12, "1:30", "ImageUrl", "VideoUrl"),
-                new Exercise(6, "Crucifixo maquina", Difficulty.EASY, 15, "1:30", "ImageUrl", "VideoUrl"),
-                new Exercise(7, "MuscleUp", Difficulty.HARD, 4, "1:30", "ImageUrl", "VideoUrl"),
-                new Exercise(8, "Flexao", Difficulty.EASY, 12, "1:30", "ImageUrl", "VideoUrl"),
-                new Exercise(9, "Remada curvada", Difficulty.HARD, 8, "1:30", "ImageUrl", "VideoUrl"),
-                new Exercise(10, "Supino inclinado com halteres", Difficulty.MEDIUM, 12, "1:30", "ImageUrl", "VideoUrl")
-        };
+public class ExerciseController extends BaseController<ExerciseDto, ExerciseRequest> {
+    @Override
+    public ResponseEntity<List<ExerciseDto>> getAll() {
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<ExerciseDto> getById(long id) {
+        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Long> create(ExerciseRequest request) {
+        Long id = service.save(request);
+        return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> edit(Long id, ExerciseRequest request) {
+        service.update(id, request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> delete(Long id) {
+        service.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

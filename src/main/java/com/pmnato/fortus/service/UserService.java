@@ -3,6 +3,7 @@ package com.pmnato.fortus.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.pmnato.fortus.commons._interface.IService;
 import com.pmnato.fortus.exception.auth_exception.PasswordDoesNotMatchException;
 import com.pmnato.fortus.exception.validation.ValidationException;
 import org.apache.logging.log4j.LogManager;
@@ -24,7 +25,7 @@ import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
-public class UserService {
+public class UserService implements IService<UserDto, UserRequest> {
 
     private final UserRepository repository;
     private static final Logger logger = LogManager.getLogger(UserService.class);

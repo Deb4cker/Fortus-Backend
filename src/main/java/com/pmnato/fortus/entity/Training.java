@@ -1,22 +1,24 @@
 package com.pmnato.fortus.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.pmnato.fortus._enum.DayOfWeek;
+
+import static com.pmnato.fortus.commons.constants.EntityName.TRAINING;
+import static com.pmnato.fortus.commons.constants.EntityName.USER;
 import static com.pmnato.fortus.commons.constants.JoinColumns.USER_ID;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-@Entity
+
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 public class Training
@@ -35,6 +37,10 @@ public class Training
     @JoinColumn(name = USER_ID, nullable = false)
     @JsonBackReference
     private User user;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy=TRAINING)
+    @JsonManagedReference
+    private List<Exercise> exercises;
 
     public Training(String description, LocalDate date, boolean status, long l, DayOfWeek dayOfWeek) {
     }
