@@ -1,6 +1,7 @@
 package com.pmnato.fortus._enum;
 
-public enum DayOfWeek {
+public enum DayOfWeek
+{
 
     SUNDAY,
     MONDAY,

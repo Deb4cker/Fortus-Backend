@@ -1,71 +1,63 @@
 package com.pmnato.fortus.controller;
 
-import com.pmnato.fortus.entity.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
+
+import com.pmnato.fortus.dto.UserDto;
+import com.pmnato.fortus.service.UserService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import com.pmnato.fortus.service.request.UserRequest;
+import com.pmnato.fortus.service.request.LoginRequest;
+import static com.pmnato.fortus.commons.constants.RestRoutes.*;
+import static com.pmnato.fortus.commons.constants.EntityRoutes.USER_ROUTE;
 
 @RestController
-public class UserController {
-
-    @GetMapping("/user/all")
-    public User[] getAll() {
-        return new User[]{
-                new User(1L, "John", "john@email.com", "", ""),
-                new User(2L, "Mary", "mary@email.com", "", ""),
-                new User(3L, "Paul", "paul@email.com", "", ""),
-                new User(4L, "Jesy", "jesy@email.com", "", ""),
-                new User(5L, "Kali", "kali@email.com", "", ""),
-                new User(6L, "Beny", "beny@email.com", "", ""),
-                new User(7L, "Bill", "bill@email.com", "", ""),
-                new User(8L, "Alle", "alle@email.com", "", ""),
-                new User(9L, "Vlad", "vlad@email.com", "", "")
-        };
+@RequestMapping(USER_ROUTE)
+public class UserController extends BaseController<UserDto, UserRequest>
+{
+    public UserController(UserService service) {
+        super(service);
     }
 
-    /*
-     * Essa rota é só para gerar uma homepage temporária. Não faz parte da implementação de vocês.
-     * Para ver a tela basta abrir a url padrão:
-     * http://localhost:8080/
-     */
-
-    @GetMapping("/")
-    public String home(){
-        return """
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                    <title>Nada pequenino, naada 🏊‍♂️</title>
-                </head>
-                <style>
-                    button {
-                        color: #090909;
-                        padding: 0.7em 1.7em;
-                        font-size: 18px;
-                        border-radius: 0.5em;
-                        background: #e8e8e8;
-                        cursor: pointer;
-                        border: 1px solid #e8e8e8;
-                        transition: all 0.3s;
-                        box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
-                    }
-                           \s
-                    button:active {
-                        color: #666;
-                        box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
-                    }
-                           \s
-                </style>
-                <body>
-                    <h1>Ta funcionando!!</h1>
-                           \s
-                    <a href="https://youtu.be/z5d80AZ-KQ4?si=JZ5o4xgrWGYjHuK-" target="_blank" style="text-decoration: none;">
-                        <button>Caminhão do diabo 🚚👺</button>
-                    </a>
-                </body>
-                </html>
-               \s""";
+    @Override
+    @PostMapping(CREATE)
+    public ResponseEntity<Long> create(@RequestBody UserRequest request) {
+        Long id = service.save(request);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
+    @Override
+    @GetMapping(ALL)
+    public ResponseEntity<List<UserDto>> getAll() {
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+    }
+
+    @Override
+    @GetMapping(ID)
+    public ResponseEntity<UserDto> getById(@PathVariable long id) {
+        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    }
+
+    @Override
+    @PutMapping(EDIT)
+    public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody UserRequest request) {
+        service.update(id, request);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    @DeleteMapping(DELETE)
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        service.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(LOGIN)
+    public ResponseEntity<UserDto> login(@RequestBody LoginRequest request) {
+        UserService service = (UserService) this.service;
+
+        var result = service.login(request.email(), request.password());
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 }
