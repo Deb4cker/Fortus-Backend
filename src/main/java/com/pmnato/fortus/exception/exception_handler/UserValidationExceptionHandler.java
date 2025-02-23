@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class UserValidationExceptionHandler extends ApplicationExceptionHandler {
-
+public class UserValidationExceptionHandler extends ApplicationExceptionHandler
+{
     @ExceptionHandler(EmailAlreadyInUseException.class)
     public ResponseEntity<Object> handleEmailAlreadyExistsException(EmailAlreadyInUseException ex) {
         return treatedResponse(ex, "Invalid email address.");

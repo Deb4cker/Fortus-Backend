@@ -14,8 +14,8 @@ import static com.pmnato.fortus.commons.constants.EntityRoutes.TRAINING_ROUTE;
 
 @RestController
 @RequestMapping(TRAINING_ROUTE)
-public class TrainingController extends BaseController<TrainingDto, TrainingRequest> {
-
+public class TrainingController extends BaseController<TrainingDto, TrainingRequest>
+{
     public TrainingController(TrainingService service) {super(service);}
 
     @Override

@@ -11,8 +11,8 @@ import static com.pmnato.fortus.commons.constants.EntityName.CAPITALIZED_USER;
 import static com.pmnato.fortus.commons.constants.EntityName.USER;
 
 @RestControllerAdvice
-public class NotFoundExceptionHandler extends ApplicationExceptionHandler{
-
+public class NotFoundExceptionHandler extends ApplicationExceptionHandler
+{
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<Object> handleUserNotFoundException(UserNotFoundException ex) {
         return treatedResponse(ex, CAPITALIZED_USER + BASE_MESSAGE);

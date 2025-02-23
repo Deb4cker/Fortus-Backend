@@ -2,7 +2,8 @@ package com.pmnato.fortus.commons.constants;
 
 import org.springframework.util.StringUtils;
 
-public final class EntityName {
+public final class EntityName
+{
     public static final String USER      = "user";
     public static final String USER_DATA = "user_data";
     public static final String TRAINING  = "training";

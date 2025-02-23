@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class SecurityExceptionHandler extends ApplicationExceptionHandler{
-
+public class SecurityExceptionHandler extends ApplicationExceptionHandler
+{
     @ExceptionHandler(SecurityException.class)
     public ResponseEntity<Object> handleSecurityException(SecurityException ex) {
         return treatedResponse(ex, "Some error occurred");

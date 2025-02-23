@@ -14,8 +14,8 @@ import static com.pmnato.fortus.commons.constants.EntityRoutes.USER_ROUTE;
 
 @RestController
 @RequestMapping(USER_ROUTE)
-public class UserController extends BaseController<UserDto, UserRequest> {
-
+public class UserController extends BaseController<UserDto, UserRequest>
+{
     public UserController(UserService service) {
         super(service);
     }

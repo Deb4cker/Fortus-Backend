@@ -24,8 +24,8 @@ import lombok.NoArgsConstructor;
 @Table(name = USERS)
 public class User
 {
-    @Id //para o JPA identificar que esse atributo é o id
-    @GeneratedValue(strategy = GenerationType.AUTO)  //valor gerado: estratégia automática
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     private String firstName;

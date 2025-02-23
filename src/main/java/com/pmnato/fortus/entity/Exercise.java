@@ -9,12 +9,14 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 import static com.pmnato.fortus.commons.constants.EntityName.EXERCISE;
+import static com.pmnato.fortus.commons.constants.JoinColumns.CATEGORY_ID;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Exercise {
+public class Exercise
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,6 +30,13 @@ public class Exercise {
 
     @OneToMany(mappedBy = EXERCISE, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrainingExercise> trainingExercises;
+
+    @OneToMany(mappedBy = EXERCISE, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Equipment> equipments;
+
+    @ManyToOne
+    @JoinColumn(name = CATEGORY_ID)
+    private Category category;
 
     public Exercise(Long id, String name, Difficulty difficulty, int repetitions, String s, String s1, String s2) {
     }

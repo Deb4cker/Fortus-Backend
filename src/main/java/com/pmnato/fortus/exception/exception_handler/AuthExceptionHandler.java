@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class AuthExceptionHandler extends ApplicationExceptionHandler {
-
+public class AuthExceptionHandler extends ApplicationExceptionHandler
+{
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<Object> handleAuthException(AuthException ex) {
         return treatedResponse(ex, "Authentication Failed");

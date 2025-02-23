@@ -12,7 +12,8 @@ import static com.pmnato.fortus.commons.constants.JoinColumns.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = TRAINING_EXERCISE)
-public class TrainingExercise {
+public class TrainingExercise
+{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;

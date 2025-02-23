@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ValidationExceptionHandler extends ApplicationExceptionHandler {
-
+public class ValidationExceptionHandler extends ApplicationExceptionHandler
+{
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<Object> handleValidationException(ValidationException ex) {
         return treatedResponse(ex, "Some field is incorrect.");

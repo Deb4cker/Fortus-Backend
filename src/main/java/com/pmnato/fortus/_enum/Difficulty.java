@@ -1,6 +1,7 @@
 package com.pmnato.fortus._enum;
 
-public enum Difficulty {
+public enum Difficulty
+{
 
     EASY,
     MEDIUM,

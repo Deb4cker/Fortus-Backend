@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestControllerAdvice
-public abstract class ApplicationExceptionHandler extends ResponseEntityExceptionHandler {
-
+public abstract class ApplicationExceptionHandler extends ResponseEntityExceptionHandler
+{
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleRunTimeException (Exception exception) {
         return getObjectResponseEntity(

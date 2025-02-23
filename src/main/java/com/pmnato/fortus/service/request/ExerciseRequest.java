@@ -9,5 +9,4 @@ public record ExerciseRequest (
         String suggestedTime,
         String imageUrl,
         String VideoUrl
-) implements Request{
-}
+) implements Request{}

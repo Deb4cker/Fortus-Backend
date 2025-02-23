@@ -14,8 +14,8 @@ import static com.pmnato.fortus.commons.constants.RestRoutes.*;
 
 @RestController
 @RequestMapping(EQUIPMENT_ROUTE)
-public class EquipmentController extends BaseController<EquipmentDto, EquipmentRequest> {
-
+public class EquipmentController extends BaseController<EquipmentDto, EquipmentRequest>
+{
     public EquipmentController(EquipmentService service) {super(service);}
 
     @Override

@@ -13,8 +13,8 @@ import java.util.List;
 import static com.pmnato.fortus.commons.constants.RestRoutes.*;
 
 @AllArgsConstructor
-public abstract class BaseController<TDto extends Dto, TRequest extends Request> {
-
+public abstract class BaseController<TDto extends Dto, TRequest extends Request>
+{
     protected final IService<TDto, TRequest> service;
 
     @GetMapping(ALL)

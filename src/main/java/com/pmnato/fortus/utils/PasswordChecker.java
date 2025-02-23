@@ -2,7 +2,8 @@ package com.pmnato.fortus.utils;
 
 import com.pmnato.fortus.entity.User;
 
-public final class PasswordChecker {
+public final class PasswordChecker
+{
     private PasswordChecker() {}
 
     public static boolean isCorrectPassword(User user, String passwordInput) {
