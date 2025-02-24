@@ -17,28 +17,24 @@ public abstract class BaseController<TDto extends Dto, TRequest extends Request>
 {
     protected final IService<TDto, TRequest> service;
 
-    @GetMapping(ALL)
     public ResponseEntity<List<TDto>> getAll(){
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping(ID)
     public ResponseEntity<TDto> getById(@PathVariable long id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
-    @PostMapping(CREATE)
+
     public ResponseEntity<Long> create(@RequestBody TRequest request) {
         Long id = service.save(request);
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
-    @PutMapping(EDIT)
     public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody TRequest request) {
         service.update(id, request);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @DeleteMapping(DELETE)
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
