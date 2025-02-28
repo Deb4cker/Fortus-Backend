@@ -30,6 +30,7 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
     }
     public Long save(TrainingRequest request) {
         Training training = new Training(
+                request.id(),
                 request.description(),
                 request.date(),
                 request.status(),

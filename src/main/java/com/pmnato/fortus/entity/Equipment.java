@@ -15,8 +15,7 @@ public class Equipment
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
-
+    private Long id;
     private String name;
     private double weight;
     private String imageUrl;
