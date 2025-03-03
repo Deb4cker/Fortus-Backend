@@ -12,6 +12,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import com.pmnato.fortus._enum.DayOfWeek;
 
 import static com.pmnato.fortus.commons.constants.Profiles.TEST_PROFILE;
 
