@@ -38,6 +38,4 @@ public class Exercise
     @JoinColumn(name = CATEGORY_ID)
     private Category category;
 
-    public Exercise(Long id, String name, Difficulty difficulty, int repetitions, String s, String s1, String s2) {
-    }
 }

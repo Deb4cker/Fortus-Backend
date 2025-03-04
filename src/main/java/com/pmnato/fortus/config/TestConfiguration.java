@@ -94,14 +94,14 @@ public class TestConfiguration implements CommandLineRunner
 
         logger.info("Fake trainings saved successfully.");
     }
-    private void generateFakeCategories(){
+    private void generateFakeCategories(){ //ERRO
         logger.info("Generating fake categories...");
         var categories = new Category[]{
-                new Category(null, "Treino de Força", "https://image.com/forca.jpg"),
-                new Category(null, "Treino Cardiovascular", "https://image.com/cardio.jpg"),
-                new Category(null, "Treino Funcional", "https://image.com/funcional.jpg"),
-                new Category(null, "Treino de Resistência", "https://image.com/resistencia.jpg"),
-                new Category(null, "Treino de Flexibilidade", "https://image.com/flexibilidade.jpg")
+                new Category(null, "Treino de Força", "https://image.com/forca.jpg", new ArrayList<>()),
+                new Category(null, "Treino Cardiovascular", "https://image.com/cardio.jpg",new ArrayList<>()),
+                new Category(null, "Treino Funcional", "https://image.com/funcional.jpg", new ArrayList<>()),
+                new Category(null, "Treino de Resistência", "https://image.com/resistencia.jpg", new ArrayList<>()),
+                new Category(null, "Treino de Flexibilidade", "https://image.com/flexibilidade.jpg", new ArrayList<>())
         };
         categoryRepository.saveAll(Arrays.asList(categories));
     }
@@ -126,7 +126,7 @@ public class TestConfiguration implements CommandLineRunner
 
         logger.info("Fake equipments saved successfully.");
     }
-    private void generateFakeExercises(){
+    private void generateFakeExercises(){ //ERRO
         logger.info("Generating fake exercises...");
 
         var categories = categoryRepository.findAll();
@@ -136,11 +136,11 @@ public class TestConfiguration implements CommandLineRunner
         }
 
         var exercise = new Exercise[]{
-                new Exercise(null, "Supino Reto", Difficulty.MEDIUM, 10, "40s", "https://image.com/supino.jpg", "https://video.com/supino.mp4"),
-                new Exercise(null, "Agachamento Livre", Difficulty.HARD, 12, "45s", "https://image.com/agachamento.jpg", "https://video.com/agachamento.mp4"),
-                new Exercise(null, "Prancha Abdominal", Difficulty.EASY, 1, "60s", "https://image.com/prancha.jpg", "https://video.com/prancha.mp4"),
-                new Exercise(null, "Rosca Direta", Difficulty.MEDIUM, 15, "30s", "https://image.com/rosca.jpg", "https://video.com/rosca.mp4"),
-                new Exercise(null, "Flexão de Braço", Difficulty.EASY, 20, "35s", "https://image.com/flexao.jpg", "https://video.com/flexao.mp4")
+                new Exercise(null, "Supino Reto", Difficulty.MEDIUM, 10, "40s", "https://image.com/supino.jpg", "https://video.com/supino.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(0)),
+                new Exercise(null, "Agachamento Livre", Difficulty.HARD, 12, "45s", "https://image.com/agachamento.jpg", "https://video.com/agachamento.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(2)),
+                new Exercise(null, "Levantamento de Copo", Difficulty.EASY, 1, "10s", "https://image.com/prancha.jpg", "https://video.com/prancha.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(3)),
+                new Exercise(null, "Rosca Direta", Difficulty.MEDIUM, 15, "30s", "https://image.com/rosca.jpg", "https://video.com/rosca.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(1)),
+                new Exercise(null, "Flexão de Olho", Difficulty.EASY, 20, "25s", "https://image.com/flexao.jpg", "https://video.com/flexao.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(4))
         };
 
         exerciseRepository.saveAll(Arrays.asList(exercise));
@@ -162,7 +162,7 @@ public class TestConfiguration implements CommandLineRunner
 
         for (int i = 0; i < trainings.size(); i++) {
             var training = trainings.get(i);
-            var exercise = exercises.get(i % exercises.size()); // Distribui os exercícios ciclicamente
+            var exercise = exercises.get(i % exercises.size());
 
             trainingExercises.add(new TrainingExercise(null, training, exercise));
         }
@@ -172,4 +172,5 @@ public class TestConfiguration implements CommandLineRunner
         logger.info("Fake training exercises saved successfully.");
 
     }
+
 }
