@@ -140,7 +140,7 @@ public class TestConfiguration implements CommandLineRunner
                 new Exercise(null, "Agachamento Livre", Difficulty.HARD, 12, "45s", "https://image.com/agachamento.jpg", "https://video.com/agachamento.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(2)),
                 new Exercise(null, "Levantamento de Copo", Difficulty.EASY, 1, "10s", "https://image.com/prancha.jpg", "https://video.com/prancha.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(3)),
                 new Exercise(null, "Rosca Direta", Difficulty.MEDIUM, 15, "30s", "https://image.com/rosca.jpg", "https://video.com/rosca.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(1)),
-                new Exercise(null, "Flexão de Olho", Difficulty.EASY, 20, "25s", "https://image.com/flexao.jpg", "https://video.com/flexao.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(4))
+                new Exercise(null, "Flexão de Olho", Difficulty.EASY, 20, "25s", "https://image.com/flexao.jpg", "https://video.com/flexao.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(4)) //Para ser fácil =)
         };
 
         exerciseRepository.saveAll(Arrays.asList(exercise));
