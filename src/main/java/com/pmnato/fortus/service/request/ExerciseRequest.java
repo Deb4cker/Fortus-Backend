@@ -8,5 +8,6 @@ public record ExerciseRequest (
         Difficulty difficultyLevel,
         String suggestedTime,
         String imageUrl,
-        String VideoUrl
+        String VideoUrl,
+        Long categoryId
 ) implements Request{}

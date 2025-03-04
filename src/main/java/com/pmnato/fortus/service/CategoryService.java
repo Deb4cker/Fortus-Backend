@@ -11,6 +11,7 @@ import lombok.Data;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -35,7 +36,8 @@ public class CategoryService implements IService<CategoryDto, CategoryRequest>
         Category Category = new Category(
                 null,
                 request.name(),
-                request.imageUrl()
+                request.imageUrl(),
+                new ArrayList<>()
         );
 
         Long id = repository.save(Category).getId();
