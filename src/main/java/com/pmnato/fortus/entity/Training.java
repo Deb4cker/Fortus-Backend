@@ -41,6 +41,6 @@ public class Training
     @OneToMany(mappedBy = TRAINING, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TrainingExercise> trainingExercises;
 
-    public Training(String description, LocalDate date, boolean status, long l, DayOfWeek dayOfWeek) {
+    public Training(Long id, String description, LocalDate date, boolean status, long l, DayOfWeek dayOfWeek) {
     }
 }

@@ -3,13 +3,12 @@ package com.pmnato.fortus.controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import static com.pmnato.fortus.commons.constants.RestRoutes.BASE_ROUTE;
-import static com.pmnato.fortus.commons.constants.RestRoutes.HOME;
+import static com.pmnato.fortus.commons.constants.EntityRoutes.HOME_ROUTE;
 
 @RestController
 public class HomeController
 {
-    @GetMapping(HOME)
+    @GetMapping(HOME_ROUTE)
     public String home(){
         return """
                 <!DOCTYPE html>

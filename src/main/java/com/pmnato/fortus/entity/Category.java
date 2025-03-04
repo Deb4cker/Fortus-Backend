@@ -19,13 +19,11 @@ public class Category
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private String name;
     private String imageUrl;
 
     @OneToMany(mappedBy = CATEGORY, cascade = CascadeType.ALL)
     private List<Exercise> exercises;
 
-    public Category(Long id, String name, String s) {
-    }
 }
