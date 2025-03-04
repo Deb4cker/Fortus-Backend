@@ -94,7 +94,7 @@ public class TestConfiguration implements CommandLineRunner
 
         logger.info("Fake trainings saved successfully.");
     }
-    private void generateFakeCategories(){ //ERRO
+    private void generateFakeCategories(){
         logger.info("Generating fake categories...");
         var categories = new Category[]{
                 new Category(null, "Treino de Força", "https://image.com/forca.jpg", new ArrayList<>()),
@@ -126,7 +126,7 @@ public class TestConfiguration implements CommandLineRunner
 
         logger.info("Fake equipments saved successfully.");
     }
-    private void generateFakeExercises(){ //ERRO
+    private void generateFakeExercises(){
         logger.info("Generating fake exercises...");
 
         var categories = categoryRepository.findAll();
