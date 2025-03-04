@@ -5,6 +5,7 @@ import com.pmnato.fortus._enum.DayOfWeek;
 import java.time.LocalDate;
 
 public record TrainingDto(
+        Long id,
         String description,
         LocalDate date,
         boolean status,

@@ -7,7 +7,6 @@ import com.pmnato.fortus.exception.not_found.TrainingNotFoundException;
 import com.pmnato.fortus.repository.TrainingRepository;
 import com.pmnato.fortus.service.request.TrainingRequest;
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +52,7 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
     }
     private TrainingDto mapToDto(Training training) {
         return new TrainingDto(
+                training.getId(),
                 training.getDescription(),
                 training.getDate(),
                 training.isStatus(),
@@ -61,6 +61,7 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
                 );
     }
     private void setData (Training training, TrainingRequest request){
+        training.setId(request.id());
         training.setDescription(request.description());
         training.setDate(request.date());
         training.setStatus(request.status());
