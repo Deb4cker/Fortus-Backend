@@ -7,12 +7,10 @@ import com.pmnato.fortus.exception.not_found.EquipmentNotFoundException;
 import com.pmnato.fortus.repository.EquipmentRepository;
 import com.pmnato.fortus.service.request.EquipmentRequest;
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @Service
 @AllArgsConstructor

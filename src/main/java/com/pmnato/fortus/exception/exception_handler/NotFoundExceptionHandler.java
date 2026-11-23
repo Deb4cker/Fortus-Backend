@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import static com.pmnato.fortus.commons.constants.EntityName.CAPITALIZED_USER;
-import static com.pmnato.fortus.commons.constants.EntityName.USER;
 
 @RestControllerAdvice
 public class NotFoundExceptionHandler extends ApplicationExceptionHandler

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.pmnato.fortus.commons.constants.RestRoutes.*;
 
 @AllArgsConstructor
 public abstract class BaseController<TDto extends Dto, TRequest extends Request>
