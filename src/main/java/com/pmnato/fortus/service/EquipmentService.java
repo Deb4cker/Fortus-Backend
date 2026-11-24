@@ -26,7 +26,6 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
         }
 
         public EquipmentDto findById(@NonNull Long id) {
-            //Objects.requireNonNull(id, "id must not be null");
             return repository.findById(id)
                 .map(this::mapToDto)
                 .orElseThrow(EquipmentNotFoundException::new);
