@@ -36,6 +36,7 @@ public class EquipmentController extends BaseController<EquipmentDto, EquipmentR
     public ResponseEntity<EquipmentDto> getById(@PathVariable long id) {
         return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
     }
+    
     @Override
     @PutMapping(EDIT)
     public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody EquipmentRequest request) {

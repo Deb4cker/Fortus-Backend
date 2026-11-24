@@ -1,6 +1,9 @@
 package com.pmnato.fortus.exception.exception_handler;
 
 import com.pmnato.fortus.exception.ApplicationException;
+
+import lombok.NonNull;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +25,19 @@ public abstract class ApplicationExceptionHandler extends ResponseEntityExceptio
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    protected ResponseEntity<Object> getObjectResponseEntity(String message, Object cause, HttpStatus httpStatus) {
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<Object> handleNullPointerException (NullPointerException exception){
+        return getObjectResponseEntity(exception.getMessage(), 
+        "Null parameter on args.", 
+        HttpStatus.BAD_REQUEST);
+    }
+
+    protected ResponseEntity<Object> getObjectResponseEntity(
+        String message, 
+        Object cause, 
+        @NonNull HttpStatus httpStatus
+    ) 
+    {
         Map<String, Object> body = new HashMap<>();
         body.put("message", message);
         body.put("returned", cause);

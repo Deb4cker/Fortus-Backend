@@ -11,6 +11,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -24,9 +25,12 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
         }
 
         public EquipmentDto findById(Long id) {
-            Equipment equipment = repository.findById(id).orElseThrow(EquipmentNotFoundException::new);
-            return mapToDto(equipment);
+            Long nonNullId = Objects.requireNonNull(id, "id must not be null");
+            return repository.findById(nonNullId)
+                .map(this::mapToDto)
+                .orElseThrow(EquipmentNotFoundException::new);
         }
+
         public Long save(EquipmentRequest request) {
             Equipment equipment = new Equipment(
                     request.id(),

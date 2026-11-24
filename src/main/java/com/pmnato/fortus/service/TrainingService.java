@@ -38,10 +38,12 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
         Long id = repository.save(training).getId();
         return id;
     }
+
     public void update(Long id, TrainingRequest request){
         Training training = repository.getReferenceById(id);
         setData(training, request);
     }
+
     public void delete(Long id) {
         try {
             repository.deleteById(id);
@@ -49,6 +51,7 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
             throw new TrainingNotFoundException();
         }
     }
+
     private TrainingDto mapToDto(Training training) {
         return new TrainingDto(
                 training.getId(),
@@ -59,6 +62,7 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
                 training.getDayOfWeek()
                 );
     }
+    
     private void setData (Training training, TrainingRequest request){
         training.setId(request.id());
         training.setDescription(request.description());
