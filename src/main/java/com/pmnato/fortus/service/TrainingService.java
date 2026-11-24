@@ -6,6 +6,8 @@ import com.pmnato.fortus.entity.Training;
 import com.pmnato.fortus.exception.not_found.TrainingNotFoundException;
 import com.pmnato.fortus.repository.TrainingRepository;
 import com.pmnato.fortus.service.request.TrainingRequest;
+
+import lombok.NonNull;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
                 .map(this::mapToDto)
                 .toList();
     }
-    public TrainingDto findById(Long id) {
+    public TrainingDto findById(@NonNull Long id) {
         Training training = repository.findById(id).orElseThrow(TrainingNotFoundException::new);
         return mapToDto(training);
     }
@@ -39,12 +41,12 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
         return id;
     }
 
-    public void update(Long id, TrainingRequest request){
+    public void update(@NonNull Long id, TrainingRequest request){
         Training training = repository.getReferenceById(id);
         setData(training, request);
     }
 
-    public void delete(Long id) {
+    public void delete(@NonNull Long id) {
         try {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
