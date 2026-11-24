@@ -23,23 +23,25 @@ public abstract class AbstractValidator<R extends Request> implements Validator<
         this.request = request;
     }
 
-    protected <E extends ValidationException> boolean executePredicate(boolean condition, Class<E> exception, Object... args) {
-        try{
-            if (!condition){
+    protected <E extends ValidationException> boolean executePredicate(
+            boolean condition,
+            Class<E> exception,
+            Object... args
+    ) {
+        if (condition) return true;
 
-                Constructor<E> constructor = exception.getConstructor(
-                        Arrays.stream(args)
-                                .map(Object::getClass)
-                                .toArray(Class[]::new)
-                );
+        try {
+            Class<?>[] parameterTypes = Arrays.stream(args)
+                    .map(arg -> arg == null ? Object.class : arg.getClass())
+                    .toArray(Class<?>[]::new);
 
-                throw constructor.newInstance(args);
-            }
-
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException ex){
-            logger.error(ex.getMessage());
+            Constructor<E> constructor = exception.getConstructor(parameterTypes);
+            throw constructor.newInstance(args);
+        } catch (NoSuchMethodException | InvocationTargetException
+                | InstantiationException | IllegalAccessException ex) {
+            logger.error("Unable to execute validation predicate", ex);
         }
 
-        return condition;
+        return false;
     }
 }

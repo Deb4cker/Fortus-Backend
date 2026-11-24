@@ -2,6 +2,7 @@ package com.pmnato.fortus.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.pmnato.fortus.commons._interface.IService;
 import com.pmnato.fortus.exception.auth_exception.PasswordDoesNotMatchException;
@@ -21,6 +22,7 @@ import com.pmnato.fortus.utils.EncryptedInputData;
 import com.pmnato.fortus.utils.Encryptor;
 import com.pmnato.fortus.utils.PasswordChecker;
 
+import lombok.NonNull;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -36,7 +38,7 @@ public class UserService implements IService<UserDto, UserRequest> {
                 .toList();
     }
 
-    public UserDto findById(Long id) {
+    public UserDto findById(@NonNull Long id) {
         User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
         return mapToDto(user);
     }
@@ -45,7 +47,7 @@ public class UserService implements IService<UserDto, UserRequest> {
         var validator = new UserValidator(request, repository);
 
         if (validator.isValidCreation()) {
-            User user = constructUser(request);
+            User user = Objects.requireNonNull(constructUser(request));
             user = repository.save(user);
             logger.info("{} {} registered in the system. (id={})", user.getFirstName(), user.getLastName(), user.getId());
             return user.getId();
@@ -54,11 +56,12 @@ public class UserService implements IService<UserDto, UserRequest> {
         throw new ValidationException();
     }
 
-    public void update(Long id, UserRequest request){
+    public void update(@NonNull Long id, UserRequest request){
         var validator = new UserValidator(request, repository);
 
         if (validator.isValid()) {
             User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
+            Objects.requireNonNull(user);
             setData(user, request);
             repository.save(user);
             return;
@@ -67,7 +70,7 @@ public class UserService implements IService<UserDto, UserRequest> {
         throw new ValidationException();
     }
 
-    public void delete(Long id) {
+    public void delete(@NonNull Long id) {
         try {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {

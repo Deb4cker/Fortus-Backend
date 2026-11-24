@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.pmnato.fortus.commons.constants.RestRoutes.*;
 
 @AllArgsConstructor
 public abstract class BaseController<TDto extends Dto, TRequest extends Request>
@@ -37,6 +36,6 @@ public abstract class BaseController<TDto extends Dto, TRequest extends Request>
 
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

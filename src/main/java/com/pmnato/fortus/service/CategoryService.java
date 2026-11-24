@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.NonNull;
+
 @Data
 @Service
 @AllArgsConstructor
@@ -27,7 +29,7 @@ public class CategoryService implements IService<CategoryDto, CategoryRequest>
                 .toList();
     }
 
-    public CategoryDto findById(Long id) {
+    public CategoryDto findById(@NonNull Long id) {
         Category Category = repository.findById(id).orElseThrow(CategoryNotFoundException::new);
         return mapToDto(Category);
     }
@@ -44,12 +46,12 @@ public class CategoryService implements IService<CategoryDto, CategoryRequest>
         return id;
     }
 
-    public void update(Long id, CategoryRequest request) {
+    public void update(@NonNull Long id, CategoryRequest request) {
         Category Category = repository.getReferenceById(id);
         setData(Category, request);
     }
 
-    public void delete(Long id) {
+    public void delete(@NonNull Long id) {
         try {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {

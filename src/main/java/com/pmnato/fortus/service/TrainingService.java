@@ -6,13 +6,13 @@ import com.pmnato.fortus.entity.Training;
 import com.pmnato.fortus.exception.not_found.TrainingNotFoundException;
 import com.pmnato.fortus.repository.TrainingRepository;
 import com.pmnato.fortus.service.request.TrainingRequest;
+
+import lombok.NonNull;
 import lombok.AllArgsConstructor;
-import org.apache.logging.log4j.LogManager;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 @Service
 @AllArgsConstructor
@@ -24,7 +24,7 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
                 .map(this::mapToDto)
                 .toList();
     }
-    public TrainingDto findById(Long id) {
+    public TrainingDto findById(@NonNull Long id) {
         Training training = repository.findById(id).orElseThrow(TrainingNotFoundException::new);
         return mapToDto(training);
     }
@@ -40,19 +40,23 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
         Long id = repository.save(training).getId();
         return id;
     }
-    public void update(Long id, TrainingRequest request){
+
+    public void update(@NonNull Long id, TrainingRequest request){
         Training training = repository.getReferenceById(id);
         setData(training, request);
     }
-    public void delete(Long id) {
+
+    public void delete(@NonNull Long id) {
         try {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {
             throw new TrainingNotFoundException();
         }
     }
+
     private TrainingDto mapToDto(Training training) {
         return new TrainingDto(
+                training.getId(),
                 training.getDescription(),
                 training.getDate(),
                 training.isStatus(),
@@ -60,7 +64,9 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
                 training.getDayOfWeek()
                 );
     }
+    
     private void setData (Training training, TrainingRequest request){
+        training.setId(request.id());
         training.setDescription(request.description());
         training.setDate(request.date());
         training.setStatus(request.status());

@@ -2,7 +2,8 @@ package com.pmnato.fortus.config;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
 import com.pmnato.fortus._enum.Difficulty;
 import com.pmnato.fortus.entity.*;
@@ -47,8 +48,8 @@ public class TestConfiguration implements CommandLineRunner
     private void generateFakeUsers(){
         logger.info("Generating fake users...");
         
-        final String password = "senha_foda";
-        var testUsers = new User[]{
+        final String password = "123456";
+        var testUsers = List.of(
                 new User(null, "John", null, "Green", "john@email.com", password, "", new ArrayList<>()),
                 new User(null, "Mary", null, "Brown", "mary@email.com", password, "", new ArrayList<>()),
                 new User(null, "Paul", null, "Harry", "paul@email.com", password, "", new ArrayList<>()),
@@ -58,7 +59,7 @@ public class TestConfiguration implements CommandLineRunner
                 new User(null, "Bill", null, "Gatsb", "bill@email.com", password, "", new ArrayList<>()),
                 new User(null, "Alle", null, "Fiell", "alle@email.com", password, "", new ArrayList<>()),
                 new User(null, "Vlad", null, "Stavs", "vlad@email.com", password, "", new ArrayList<>())
-        };
+        );
 
         for (User user : testUsers){
             var encryptData = Encryptor.getEncryptData(password);
@@ -68,8 +69,9 @@ public class TestConfiguration implements CommandLineRunner
             logger.info("User {} {} generated.", user.getFirstName(), user.getLastName());
         }
 
+        Objects.requireNonNull(testUsers);
         logger.info("Saving users...");
-        userRepository.saveAll(Arrays.asList(testUsers));
+        userRepository.saveAll(testUsers);
         logger.info("Fake users saved successfully.");
     }
 
@@ -82,29 +84,35 @@ public class TestConfiguration implements CommandLineRunner
             return;
         }
 
-        var training = new Training[]{
+        var training = List.of(
                 new Training(null, "Treino de Peito e Tríceps", LocalDate.now().plusDays(5), true, 3600000L, DayOfWeek.MONDAY, users.get(0), new ArrayList<>()),
                 new Training(null, "Treino de Pernas e Glúteos", LocalDate.now().plusDays(1), true, 4500000L, DayOfWeek.TUESDAY, users.get(1), new ArrayList<>()),
                 new Training(null, "Treino de Costas e Bíceps", LocalDate.now().plusDays(2), false, 4000000L, DayOfWeek.WEDNESDAY, users.get(2), new ArrayList<>()),
                 new Training(null, "Treino de Cardio e Resistência", LocalDate.now().plusDays(3), true, 3000000L, DayOfWeek.THURSDAY, users.get(3), new ArrayList<>()),
                 new Training(null, "Treino Funcional", LocalDate.now().plusDays(4), false, 3500000L, DayOfWeek.FRIDAY, users.get(4), new ArrayList<>())
-        };
+        );
 
-        trainingRepository.saveAll(Arrays.asList(training));
-
+        Objects.requireNonNull(training);
+        trainingRepository.saveAll(training);
         logger.info("Fake trainings saved successfully.");
     }
-    private void generateFakeCategories(){ //ERRO
+
+    private void generateFakeCategories(){
         logger.info("Generating fake categories...");
-        var categories = new Category[]{
+
+        var categories = List.of(
                 new Category(null, "Treino de Força", "https://image.com/forca.jpg", new ArrayList<>()),
                 new Category(null, "Treino Cardiovascular", "https://image.com/cardio.jpg",new ArrayList<>()),
                 new Category(null, "Treino Funcional", "https://image.com/funcional.jpg", new ArrayList<>()),
                 new Category(null, "Treino de Resistência", "https://image.com/resistencia.jpg", new ArrayList<>()),
                 new Category(null, "Treino de Flexibilidade", "https://image.com/flexibilidade.jpg", new ArrayList<>())
-        };
-        categoryRepository.saveAll(Arrays.asList(categories));
+        );
+
+        Objects.requireNonNull(categories);
+        categoryRepository.saveAll(categories);
+        logger.info("Fake categories saved successfully.");
     }
+
     private void generateFakeEquipments(){
         logger.info("Generating fake equipments...");
 
@@ -114,19 +122,20 @@ public class TestConfiguration implements CommandLineRunner
             return;
         }
 
-        var equipments = new Equipment[]{
+        var equipments = List.of(
                 new Equipment(null, "Halteres 10kg", 10.0, "https://image.com/halteres10.jpg", exercises.get(0)),
                 new Equipment(null, "Barra Olímpica 20kg", 20.0, "https://image.com/barra20.jpg", exercises.get(1)),
                 new Equipment(null, "Kettlebell 16kg", 16.0, "https://image.com/kettlebell16.jpg", exercises.get(2)),
                 new Equipment(null, "Faixa de Resistência", 0.5, "https://image.com/faixa.jpg", exercises.get(3)),
                 new Equipment(null, "Roda de Abdominal", 1.5, "https://image.com/roda.jpg", exercises.get(4))
-        };
+        );
 
-        equipmentRepository.saveAll(Arrays.asList(equipments));
-
+        Objects.requireNonNull(equipments);
+        equipmentRepository.saveAll(equipments);
         logger.info("Fake equipments saved successfully.");
     }
-    private void generateFakeExercises(){ //ERRO
+
+    private void generateFakeExercises(){
         logger.info("Generating fake exercises...");
 
         var categories = categoryRepository.findAll();
@@ -135,18 +144,19 @@ public class TestConfiguration implements CommandLineRunner
             return;
         }
 
-        var exercise = new Exercise[]{
+        var exercise = List.of(
                 new Exercise(null, "Supino Reto", Difficulty.MEDIUM, 10, "40s", "https://image.com/supino.jpg", "https://video.com/supino.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(0)),
                 new Exercise(null, "Agachamento Livre", Difficulty.HARD, 12, "45s", "https://image.com/agachamento.jpg", "https://video.com/agachamento.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(2)),
                 new Exercise(null, "Levantamento de Copo", Difficulty.EASY, 1, "10s", "https://image.com/prancha.jpg", "https://video.com/prancha.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(3)),
                 new Exercise(null, "Rosca Direta", Difficulty.MEDIUM, 15, "30s", "https://image.com/rosca.jpg", "https://video.com/rosca.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(1)),
                 new Exercise(null, "Flexão de Olho", Difficulty.EASY, 20, "25s", "https://image.com/flexao.jpg", "https://video.com/flexao.mp4", new ArrayList<>(), new ArrayList<>(), categories.get(4)) //Para ser fácil =)
-        };
+        );
 
-        exerciseRepository.saveAll(Arrays.asList(exercise));
-
+        Objects.requireNonNull(exercise);
+        exerciseRepository.saveAll(exercise);
         logger.info("Fake exercises saved successfully.");
     }
+
     private void generateFakeTrainingExercises(){
         logger.info("Generating fake training exercises...");
 
@@ -168,9 +178,7 @@ public class TestConfiguration implements CommandLineRunner
         }
 
         trainingExerciseRepository.saveAll(trainingExercises);
-
         logger.info("Fake training exercises saved successfully.");
 
     }
-
 }

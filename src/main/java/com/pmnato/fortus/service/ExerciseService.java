@@ -7,6 +7,8 @@ import com.pmnato.fortus.entity.Exercise;
 import com.pmnato.fortus.repository.CategoryRepository;
 import com.pmnato.fortus.repository.ExerciseRepository;
 import com.pmnato.fortus.service.request.ExerciseRequest;
+
+import lombok.NonNull;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import com.pmnato.fortus.exception.not_found.ExerciseNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -27,13 +30,14 @@ public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
                 .toList();
     }
 
-    public ExerciseDto findById(Long id) {
+    public ExerciseDto findById(@NonNull Long id) {
         Exercise exercise = repository.findById(id).orElseThrow(ExerciseNotFoundException::new);
         return mapToDto(exercise);
     }
 
-    public Long save(ExerciseRequest request) {
-        Category category = categoryRepository.findById(request.categoryId()).get();
+    public Long save(@NonNull ExerciseRequest request) {
+        Long categoryId = Objects.requireNonNull(request.categoryId());
+        Category category = categoryRepository.findById(categoryId).get();
 
         Exercise exercise = new Exercise(
                 null,
@@ -52,12 +56,12 @@ public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
         return id;
     }
 
-    public void update(Long id, ExerciseRequest request){
+    public void update(@NonNull Long id, ExerciseRequest request){
         Exercise exercise = repository.getReferenceById(id);
         setData(exercise, request);
     }
 
-    public void delete(Long id) {
+    public void delete(@NonNull Long id) {
         try {
             repository.deleteById(id);
         } catch (EmptyResultDataAccessException e) {

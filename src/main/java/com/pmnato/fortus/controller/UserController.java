@@ -16,41 +16,36 @@ import static com.pmnato.fortus.commons.constants.EntityRoutes.USER_ROUTE;
 @RequestMapping(USER_ROUTE)
 public class UserController extends BaseController<UserDto, UserRequest>
 {
-    public UserController(UserService service) {
-        super(service);
-    }
+    public UserController(UserService service) { super(service); }
 
     @Override
     @PostMapping(CREATE)
     public ResponseEntity<Long> create(@RequestBody UserRequest request) {
-        Long id = service.save(request);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return super.create(request);
     }
 
     @Override
     @GetMapping(ALL)
     public ResponseEntity<List<UserDto>> getAll() {
-        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+        return super.getAll();
     }
 
     @Override
     @GetMapping(ID)
     public ResponseEntity<UserDto> getById(@PathVariable long id) {
-        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+        return super.getById(id);
     }
 
     @Override
     @PutMapping(EDIT)
     public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody UserRequest request) {
-        service.update(id, request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return super.edit(id, request);
     }
 
     @Override
     @DeleteMapping(DELETE)
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        service.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return super.delete(id);
     }
 
     @PostMapping(LOGIN)

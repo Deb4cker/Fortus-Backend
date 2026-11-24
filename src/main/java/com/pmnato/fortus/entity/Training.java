@@ -1,6 +1,5 @@
 package com.pmnato.fortus.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
@@ -10,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.pmnato.fortus._enum.DayOfWeek;
 
 import static com.pmnato.fortus.commons.constants.EntityName.TRAINING;
-import static com.pmnato.fortus.commons.constants.EntityName.USER;
 import static com.pmnato.fortus.commons.constants.JoinColumns.*;
 
 import lombok.AllArgsConstructor;
