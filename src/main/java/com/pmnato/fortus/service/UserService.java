@@ -61,6 +61,7 @@ public class UserService implements IService<UserDto, UserRequest> {
 
         if (validator.isValid()) {
             User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
+            Objects.requireNonNull(user);
             setData(user, request);
             repository.save(user);
             return;
