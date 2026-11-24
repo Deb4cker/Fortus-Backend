@@ -7,11 +7,12 @@ import com.pmnato.fortus.exception.not_found.EquipmentNotFoundException;
 import com.pmnato.fortus.repository.EquipmentRepository;
 import com.pmnato.fortus.service.request.EquipmentRequest;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
+
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -24,9 +25,9 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
                     .toList();
         }
 
-        public EquipmentDto findById(Long id) {
-            Long nonNullId = Objects.requireNonNull(id, "id must not be null");
-            return repository.findById(nonNullId)
+        public EquipmentDto findById(@NonNull Long id) {
+            //Objects.requireNonNull(id, "id must not be null");
+            return repository.findById(id)
                 .map(this::mapToDto)
                 .orElseThrow(EquipmentNotFoundException::new);
         }
@@ -41,17 +42,20 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
             Long id = repository.save(equipment).getId();
             return id;
         }
-        public void update(Long id, EquipmentRequest request){
+
+        public void update(@NonNull Long id, EquipmentRequest request){
             Equipment equipment = repository.getReferenceById(id);
             setData(equipment, request);
         }
-        public void delete(Long id) {
+
+        public void delete(@NonNull Long id) {
             try {
                 repository.deleteById(id);
             } catch (EmptyResultDataAccessException e) {
                 throw new EquipmentNotFoundException();
             }
         }
+
         private EquipmentDto mapToDto(Equipment equipment) {
             return new EquipmentDto(
                     equipment.getId(),
@@ -60,6 +64,7 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
                     equipment.getImageUrl()
             );
         }
+
         private void setData (Equipment equipment, EquipmentRequest request){
             equipment.setId(request.id());
             equipment.setName(request.name());
@@ -67,3 +72,4 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
             equipment.setImageUrl(request.imageUrl());
         }
     }
+    

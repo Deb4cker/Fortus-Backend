@@ -3,7 +3,6 @@ package com.pmnato.fortus.controller;
 import com.pmnato.fortus.dto.ExerciseDto;
 import com.pmnato.fortus.service.ExerciseService;
 import com.pmnato.fortus.service.request.ExerciseRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,38 +15,35 @@ import static com.pmnato.fortus.commons.constants.RestRoutes.*;
 @RequestMapping(EXERCISE_ROUTE)
 public class ExerciseController extends BaseController<ExerciseDto, ExerciseRequest>
 {
-    public ExerciseController(ExerciseService service) {super(service);}
+    public ExerciseController(ExerciseService service) { super(service); }
 
     @Override
     @GetMapping(ALL)
     public ResponseEntity<List<ExerciseDto>> getAll() {
-        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+        return super.getAll();
     }
 
     @Override
     @GetMapping(ID)
     public ResponseEntity<ExerciseDto> getById(long id) {
-        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+        return super.getById(id);
     }
 
     @Override
     @PostMapping(CREATE)
     public ResponseEntity<Long> create(ExerciseRequest request) {
-        Long id = service.save(request);
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return super.create(request);
     }
 
     @Override
     @PutMapping(EDIT)
     public ResponseEntity<Void> edit(Long id, ExerciseRequest request) {
-        service.update(id, request);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return super.edit(id, request);
     }
 
     @Override
     @DeleteMapping(DELETE)
     public ResponseEntity<Void> delete(Long id) {
-        service.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return super.delete(id);
     }
 }
