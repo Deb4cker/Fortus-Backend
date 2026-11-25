@@ -49,7 +49,6 @@ public class CategoryService implements IService<CategoryDto, CategoryRequest>
     public void update(@NonNull Long id, CategoryRequest request) {
         Category category = repository.findById(id).orElseThrow(CategoryNotFoundException::new);
         setData(category, request);
-        
         repository.save(category);
     }
 

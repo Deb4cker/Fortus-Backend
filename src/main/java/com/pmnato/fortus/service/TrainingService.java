@@ -24,19 +24,22 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
                 .map(this::mapToDto)
                 .toList();
     }
+    
     public TrainingDto findById(@NonNull Long id) {
         Training training = repository.findById(id).orElseThrow(TrainingNotFoundException::new);
         return mapToDto(training);
     }
+    
     public Long save(TrainingRequest request) {
         Training training = new Training(
-                request.id(),
+                null,
                 request.description(),
                 request.date(),
                 request.status(),
                 request.durationTimeMillis(),
                 request.dayOfWeek()
         );
+        
         Long id = repository.save(training).getId();
         return id;
     }
@@ -44,6 +47,7 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
     public void update(@NonNull Long id, TrainingRequest request){
         Training training = repository.getReferenceById(id);
         setData(training, request);
+        repository.save(training);
     }
 
     public void delete(@NonNull Long id) {
@@ -66,7 +70,6 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
     }
     
     private void setData (Training training, TrainingRequest request){
-        training.setId(request.id());
         training.setDescription(request.description());
         training.setDate(request.date());
         training.setStatus(request.status());

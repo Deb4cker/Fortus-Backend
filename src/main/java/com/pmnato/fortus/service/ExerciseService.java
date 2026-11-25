@@ -59,6 +59,7 @@ public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
     public void update(@NonNull Long id, ExerciseRequest request){
         Exercise exercise = repository.getReferenceById(id);
         setData(exercise, request);
+        repository.save(exercise);
     }
 
     public void delete(@NonNull Long id) {
