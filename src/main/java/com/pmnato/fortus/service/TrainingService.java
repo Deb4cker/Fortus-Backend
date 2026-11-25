@@ -44,10 +44,12 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
         return id;
     }
 
-    public void update(@NonNull Long id, TrainingRequest request){
+    public TrainingDto update(@NonNull Long id, TrainingRequest request){
         Training training = repository.getReferenceById(id);
         setData(training, request);
         repository.save(training);
+        
+        return mapToDto(training);
     }
 
     public void delete(@NonNull Long id) {

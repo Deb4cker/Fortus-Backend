@@ -56,18 +56,17 @@ public class UserService implements IService<UserDto, UserRequest> {
         throw new ValidationException();
     }
 
-    public void update(@NonNull Long id, UserRequest request){
+    public UserDto update(@NonNull Long id, UserRequest request){
         var validator = new UserValidator(request, repository);
 
-        if (validator.isValid()) {
-            User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
-            Objects.requireNonNull(user);
-            setData(user, request);
-            repository.save(user);
-            return;
-        }
+        if (!validator.isValid()) throw new ValidationException();
 
-        throw new ValidationException();
+        User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
+        Objects.requireNonNull(user);
+        setData(user, request);
+        repository.save(user);
+        
+        return mapToDto(user);        
     }
 
     public void delete(@NonNull Long id) {
@@ -82,12 +81,10 @@ public class UserService implements IService<UserDto, UserRequest> {
         User user = repository.findByEmail(email).orElseThrow(UserNotFoundException::new);
         boolean isPasswordCorrect = PasswordChecker.isCorrectPassword(user, password);
 
-        if(isPasswordCorrect) {
-            logger.info("{} {} (id={}) logged.", user.getFirstName(), user.getLastName(), user.getId());
-            return mapToDto(user);
-        }
-
-        throw new PasswordDoesNotMatchException();
+        if(!isPasswordCorrect) throw new PasswordDoesNotMatchException();
+        
+        logger.info("{} {} (id={}) logged.", user.getFirstName(), user.getLastName(), user.getId());
+        return mapToDto(user);
     }
 
     private UserDto mapToDto(User user) {

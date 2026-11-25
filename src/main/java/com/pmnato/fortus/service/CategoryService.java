@@ -46,10 +46,12 @@ public class CategoryService implements IService<CategoryDto, CategoryRequest>
         return id;
     }
 
-    public void update(@NonNull Long id, CategoryRequest request) {
+    public CategoryDto update(@NonNull Long id, CategoryRequest request) {
         Category category = repository.findById(id).orElseThrow(CategoryNotFoundException::new);
         setData(category, request);
         repository.save(category);
+        
+        return mapToDto(category);
     }
 
     public void delete(@NonNull Long id) {

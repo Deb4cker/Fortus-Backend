@@ -56,10 +56,12 @@ public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
         return id;
     }
 
-    public void update(@NonNull Long id, ExerciseRequest request){
+    public ExerciseDto update(@NonNull Long id, ExerciseRequest request){
         Exercise exercise = repository.getReferenceById(id);
         setData(exercise, request);
         repository.save(exercise);
+        
+        return mapToDto(exercise);
     }
 
     public void delete(@NonNull Long id) {

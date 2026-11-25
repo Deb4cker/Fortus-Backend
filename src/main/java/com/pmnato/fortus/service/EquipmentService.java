@@ -43,10 +43,12 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
             return id;
         }
 
-        public void update(@NonNull Long id, EquipmentRequest request){
+        public EquipmentDto update(@NonNull Long id, EquipmentRequest request){
             Equipment equipment = repository.getReferenceById(id);
             setData(equipment, request);
             repository.save(equipment);
+            
+            return mapToDto(equipment);
         }
 
         public void delete(@NonNull Long id) {

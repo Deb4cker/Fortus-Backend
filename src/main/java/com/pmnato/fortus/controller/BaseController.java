@@ -29,9 +29,8 @@ public abstract class BaseController<TDto extends Dto, TRequest extends Request>
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
-    public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody TRequest request) {
-        service.update(id, request);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<TDto> edit(@PathVariable Long id, @RequestBody TRequest request) {
+        return new ResponseEntity<>(service.update(id, request), HttpStatus.OK);
     }
 
     public ResponseEntity<Void> delete(@PathVariable Long id) {

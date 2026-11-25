@@ -10,6 +10,6 @@ public interface IService<TDto extends Dto, TRequest extends Request>
     Long save(TRequest request);
     List<TDto> findAll();
     TDto findById(Long id);
-    void update(Long id, TRequest request);
+    TDto update(Long id, TRequest request);
     void delete(Long id);
 }

@@ -38,7 +38,7 @@ public class UserController extends BaseController<UserDto, UserRequest>
 
     @Override
     @PutMapping(EDIT)
-    public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody UserRequest request) {
+    public ResponseEntity<UserDto> edit(@PathVariable Long id, @RequestBody UserRequest request) {
         return super.edit(id, request);
     }
 

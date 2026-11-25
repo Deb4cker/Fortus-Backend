@@ -37,7 +37,7 @@ public class CategoryController extends BaseController<CategoryDto, CategoryRequ
     
     @Override
     @PutMapping(EDIT)
-    public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody CategoryRequest request) {
+    public ResponseEntity<CategoryDto> edit(@PathVariable Long id, @RequestBody CategoryRequest request) {
         return super.edit(id, request);
     }
 

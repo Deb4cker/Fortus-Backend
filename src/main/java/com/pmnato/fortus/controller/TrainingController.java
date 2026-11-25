@@ -37,7 +37,7 @@ public class TrainingController extends BaseController<TrainingDto, TrainingRequ
 
     @Override
     @PutMapping(EDIT)
-    public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody TrainingRequest request) {
+    public ResponseEntity<TrainingDto> edit(@PathVariable Long id, @RequestBody TrainingRequest request) {
         return super.edit(id, request);
     }
 

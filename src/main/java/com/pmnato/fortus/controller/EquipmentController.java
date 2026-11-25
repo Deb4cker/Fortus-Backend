@@ -37,7 +37,7 @@ public class EquipmentController extends BaseController<EquipmentDto, EquipmentR
 
     @Override
     @PutMapping(EDIT)
-    public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody EquipmentRequest request) {
+    public ResponseEntity<EquipmentDto> edit(@PathVariable Long id, @RequestBody EquipmentRequest request) {
         return super.edit(id, request);
     }
 
