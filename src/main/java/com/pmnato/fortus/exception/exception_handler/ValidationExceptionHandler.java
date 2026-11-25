@@ -26,6 +26,6 @@ public class ValidationExceptionHandler extends ApplicationExceptionHandler
 
     @Override
     protected ResponseEntity<Object> treatedResponse(ApplicationException exception, Object cause) {
-        return getObjectResponseEntity(cause, HttpStatus.FORBIDDEN);
+        return getObjectResponseEntity(cause, HttpStatus.BAD_REQUEST);
     }
 }
