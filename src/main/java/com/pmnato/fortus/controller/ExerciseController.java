@@ -25,25 +25,25 @@ public class ExerciseController extends BaseController<ExerciseDto, ExerciseRequ
 
     @Override
     @GetMapping(ID)
-    public ResponseEntity<ExerciseDto> getById(long id) {
+    public ResponseEntity<ExerciseDto> getById(@PathVariable long id) {
         return super.getById(id);
     }
 
     @Override
     @PostMapping(CREATE)
-    public ResponseEntity<Long> create(ExerciseRequest request) {
+    public ResponseEntity<Long> create(@RequestBody ExerciseRequest request) {
         return super.create(request);
     }
 
     @Override
     @PutMapping(EDIT)
-    public ResponseEntity<Void> edit(Long id, ExerciseRequest request) {
+    public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody ExerciseRequest request) {
         return super.edit(id, request);
     }
 
     @Override
     @DeleteMapping(DELETE)
-    public ResponseEntity<Void> delete(Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         return super.delete(id);
     }
 }

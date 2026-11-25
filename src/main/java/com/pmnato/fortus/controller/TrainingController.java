@@ -25,25 +25,25 @@ public class TrainingController extends BaseController<TrainingDto, TrainingRequ
 
     @Override
     @GetMapping(ID)
-    public ResponseEntity<TrainingDto> getById(long id) {
+    public ResponseEntity<TrainingDto> getById(@PathVariable long id) {
         return super.getById(id);
     }
 
     @Override
     @PostMapping(CREATE)
-    public ResponseEntity<Long> create(TrainingRequest request) {
+    public ResponseEntity<Long> create(@RequestBody TrainingRequest request) {
         return super.create(request);
     }
 
     @Override
     @PutMapping(EDIT)
-    public ResponseEntity<Void> edit(Long id, TrainingRequest request) {
+    public ResponseEntity<Void> edit(@PathVariable Long id, @RequestBody TrainingRequest request) {
         return super.edit(id, request);
     }
 
     @Override
     @DeleteMapping(DELETE)
-    public ResponseEntity<Void> delete(Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         return super.delete(id);
     }
 }

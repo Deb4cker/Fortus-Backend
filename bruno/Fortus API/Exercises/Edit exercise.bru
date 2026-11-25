@@ -1,0 +1,23 @@
+meta {
+  name: Edit exercise
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/v0.0/exercise/edit/{{id}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Push-up",
+    "repetitions": 12,
+    "difficultyLevel": "MEDIUM",
+    "suggestedTime": "30 seconds",
+    "imageUrl": "",
+    "VideoUrl": "",
+    "categoryId": 1
+  }
+}

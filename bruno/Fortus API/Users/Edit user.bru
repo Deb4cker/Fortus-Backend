@@ -1,0 +1,22 @@
+meta {
+  name: Edit user
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/v0.0/user/edit/{{id}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "firstName": "Alex",
+    "midName": "",
+    "lastName": "Morgan",
+    "email": "alex.morgan@example.com",
+    "password": "SecurePassword123!",
+    "passwordConfirmation": "SecurePassword123!"
+  }
+}

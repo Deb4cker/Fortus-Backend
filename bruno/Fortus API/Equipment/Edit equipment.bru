@@ -1,0 +1,20 @@
+meta {
+  name: Edit equipment
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/v0.0/equipment/edit/{{id}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": {{id}},
+    "name": "Dumbbell",
+    "weight": 5.0,
+    "imageUrl": ""
+  }
+}

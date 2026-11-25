@@ -1,0 +1,22 @@
+meta {
+  name: Edit training
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/api/v0.0/training/edit/{{id}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": {{id}},
+    "description": "Strength session",
+    "date": "2026-11-25",
+    "status": false,
+    "durationTimeMillis": 3600000,
+    "dayOfWeek": "WEDNESDAY"
+  }
+}

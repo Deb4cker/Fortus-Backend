@@ -1,0 +1,23 @@
+meta {
+  name: Create exercise
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/api/v0.0/exercise/create
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Push-up",
+    "repetitions": 12,
+    "difficultyLevel": "MEDIUM",
+    "suggestedTime": "30 seconds",
+    "imageUrl": "",
+    "VideoUrl": "",
+    "categoryId": 1
+  }
+}
