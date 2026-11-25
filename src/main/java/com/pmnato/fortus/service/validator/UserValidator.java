@@ -2,7 +2,6 @@ package com.pmnato.fortus.service.validator;
 
 import com.pmnato.fortus.exception.validation.user.EmailAlreadyInUseException;
 import com.pmnato.fortus.exception.validation.user.InvalidEmailException;
-import com.pmnato.fortus.exception.validation.user.InvalidNameException;
 import com.pmnato.fortus.exception.validation.user.InvalidPasswordException;
 import com.pmnato.fortus.repository.UserRepository;
 import com.pmnato.fortus.service.request.UserRequest;
@@ -18,41 +17,51 @@ public class UserValidator extends AbstractValidator<UserRequest> {
 
     @Override
     public boolean isValidCreation() {
-        return isValid() && !emailAlreadyInUse();
+        boolean valid = isValid();
+        if (request != null && hasValidEmailFormat(request.email())) {
+            valid &= emailIsAvailable();
+        }
+        return valid;
     }
 
     @Override
     public boolean isValid() {
-        return requestIsPresent()
-                && nameIsValid(request.firstName())
-                && nameIsValid(request.lastName())
-                && emailIsValid()
-                && passwordIsValid();
+        resetErrors();
+        if (!requestIsPresent()) return false;
+        boolean valid = nameIsValid(request.firstName(), "firstName");
+        valid &= nameIsValid(request.lastName(), "lastName");
+        valid &= emailIsValid();
+        valid &= passwordIsValid();
+        return valid;
     }
 
-    private boolean nameIsValid(String name) {
-        return executePredicate(name != null && !name.trim().isEmpty(), InvalidNameException.class);
+    private boolean nameIsValid(String name, String field) {
+        return check(
+                name != null && !name.isBlank(),
+                "The field " + field + " is empty."
+        );
     }
 
     private boolean emailIsValid() {
-        return executePredicate(request.email() != null
-                && !request.email().trim().isEmpty()
-                &&  request.email().contains("@"),
-                InvalidEmailException.class
-        );
+        return check(hasValidEmailFormat(request.email()), new InvalidEmailException().getMessage());
     }
 
     private boolean passwordIsValid() {
-        return executePredicate(request.password() != null
-                &&  request.password().equals(request.passwordConfirmation())
-                && !request.password().trim().isEmpty()
-                &&  request.password().length() >= 6,
-                InvalidPasswordException.class
+        return check(
+                request.password() != null
+                        && request.password().equals(request.passwordConfirmation())
+                        && !request.password().isBlank()
+                        && request.password().length() >= 6,
+                new InvalidPasswordException().getMessage()
         );
     }
 
-    private boolean emailAlreadyInUse() {
-        boolean exists = userRepository.findByEmail(request.email()).isPresent();
-        return !executePredicate(!exists, EmailAlreadyInUseException.class);
+    private boolean emailIsAvailable() {
+        boolean available = userRepository.findByEmail(request.email()).isEmpty();
+        return check(available, new EmailAlreadyInUseException().getMessage());
+    }
+
+    private boolean hasValidEmailFormat(String email) {
+        return email != null && !email.isBlank() && email.contains("@");
     }
 }

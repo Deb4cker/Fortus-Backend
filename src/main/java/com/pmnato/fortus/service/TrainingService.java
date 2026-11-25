@@ -34,8 +34,9 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
     }
     
     public Long save(TrainingRequest request) {
-        if (!new TrainingValidator(request).isValidCreation()) {
-            throw new ValidationException();
+        TrainingValidator validator = new TrainingValidator(request);
+        if (!validator.isValidCreation()) {
+            throw new ValidationException(validator.getErrors());
         }
 
         Training training = new Training(
@@ -52,8 +53,9 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
     }
 
     public TrainingDto update(@NonNull Long id, TrainingRequest request){
-        if (!new TrainingValidator(request).isValid()) {
-            throw new ValidationException();
+        TrainingValidator validator = new TrainingValidator(request);
+        if (!validator.isValid()) {
+            throw new ValidationException(validator.getErrors());
         }
 
         Training training = repository.findById(id).orElseThrow(TrainingNotFoundException::new);

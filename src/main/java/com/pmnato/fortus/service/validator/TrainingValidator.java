@@ -1,7 +1,5 @@
 package com.pmnato.fortus.service.validator;
 
-import com.pmnato.fortus.exception.validation.EmptyFieldException;
-import com.pmnato.fortus.exception.validation.ValidationException;
 import com.pmnato.fortus.service.request.TrainingRequest;
 
 public class TrainingValidator extends AbstractValidator<TrainingRequest> {
@@ -17,42 +15,40 @@ public class TrainingValidator extends AbstractValidator<TrainingRequest> {
 
     @Override
     public boolean isValid() {
-        return requestIsPresent()
-                && descriptionIsValid()
-                && dateIsValid()
-                && durationIsValid()
-                && dayOfWeekIsValid();
+        resetErrors();
+        if (!requestIsPresent()) return false;
+        boolean valid = descriptionIsValid();
+        valid &= dateIsValid();
+        valid &= durationIsValid();
+        valid &= dayOfWeekIsValid();
+        return valid;
     }
 
     private boolean descriptionIsValid() {
-        return executePredicate(
+        return check(
                 request.description() != null && !request.description().isBlank(),
-                EmptyFieldException.class,
-                "description"
+                "The field description is empty."
         );
     }
 
     private boolean dateIsValid() {
-        return executePredicate(
+        return check(
                 request.date() != null,
-                EmptyFieldException.class,
-                "date"
+                "The field date is empty."
         );
     }
 
     private boolean durationIsValid() {
-        return executePredicate(
+        return check(
                 request.durationTimeMillis() >= 0,
-                ValidationException.class,
                 "Duration must not be negative."
         );
     }
 
     private boolean dayOfWeekIsValid() {
-        return executePredicate(
+        return check(
                 request.dayOfWeek() != null,
-                EmptyFieldException.class,
-                "dayOfWeek"
+                "The field dayOfWeek is empty."
         );
     }
 }

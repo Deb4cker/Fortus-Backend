@@ -38,8 +38,9 @@ public class CategoryService implements IService<CategoryDto, CategoryRequest>
     }
 
     public Long save(CategoryRequest request) {
-        if (!new CategoryValidator(request).isValidCreation()) {
-            throw new ValidationException();
+        CategoryValidator validator = new CategoryValidator(request);
+        if (!validator.isValidCreation()) {
+            throw new ValidationException(validator.getErrors());
         }
 
         Category Category = new Category(
@@ -54,8 +55,9 @@ public class CategoryService implements IService<CategoryDto, CategoryRequest>
     }
 
     public CategoryDto update(@NonNull Long id, CategoryRequest request) {
-        if (!new CategoryValidator(request).isValid()) {
-            throw new ValidationException();
+        CategoryValidator validator = new CategoryValidator(request);
+        if (!validator.isValid()) {
+            throw new ValidationException(validator.getErrors());
         }
 
         Category category = repository.findById(id).orElseThrow(CategoryNotFoundException::new);

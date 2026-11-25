@@ -1,16 +1,20 @@
 package com.pmnato.fortus.exception.exception_handler;
 
 import com.pmnato.fortus.exception.ApplicationException;
+import com.pmnato.fortus.exception.validation.ValidationException;
 import com.pmnato.fortus.exception.validation.user.EmailAlreadyInUseException;
 import com.pmnato.fortus.exception.validation.user.InvalidEmailException;
 import com.pmnato.fortus.exception.validation.user.InvalidNameException;
 import com.pmnato.fortus.exception.validation.user.InvalidPasswordException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class UserValidationExceptionHandler extends ApplicationExceptionHandler
 {
     @ExceptionHandler(EmailAlreadyInUseException.class)
@@ -36,8 +40,9 @@ public class UserValidationExceptionHandler extends ApplicationExceptionHandler
     @Override
     protected ResponseEntity<Object> treatedResponse(ApplicationException exception, Object cause) {
         return getObjectResponseEntity(
-                exception.getMessage(),
-                cause,
+                exception instanceof ValidationException validationException
+                        ? validationException.getErrors()
+                        : cause,
                 HttpStatus.FORBIDDEN);
     }
 }

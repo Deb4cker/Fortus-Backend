@@ -1,7 +1,5 @@
 package com.pmnato.fortus.service.validator;
 
-import com.pmnato.fortus.exception.validation.EmptyFieldException;
-import com.pmnato.fortus.exception.validation.ValidationException;
 import com.pmnato.fortus.service.request.EquipmentRequest;
 
 public class EquipmentValidator extends AbstractValidator<EquipmentRequest> {
@@ -17,21 +15,23 @@ public class EquipmentValidator extends AbstractValidator<EquipmentRequest> {
 
     @Override
     public boolean isValid() {
-        return requestIsPresent() && nameIsValid() && weightIsValid();
+        resetErrors();
+        if (!requestIsPresent()) return false;
+        boolean valid = nameIsValid();
+        valid &= weightIsValid();
+        return valid;
     }
 
     private boolean nameIsValid() {
-        return executePredicate(
+        return check(
                 request.name() != null && !request.name().isBlank(),
-                EmptyFieldException.class,
-                "name"
+                "The field name is empty."
         );
     }
 
     private boolean weightIsValid() {
-        return executePredicate(
+        return check(
                 Double.isFinite(request.weight()) && request.weight() >= 0,
-                ValidationException.class,
                 "Weight must be a finite, non-negative number."
         );
     }

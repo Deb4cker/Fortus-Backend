@@ -44,7 +44,7 @@ public class UserService implements IService<UserDto, UserRequest> {
     }
 
     public Long save(UserRequest request) {
-        var validator = new UserValidator(request, repository);
+        UserValidator validator = new UserValidator(request, repository);
 
         if (validator.isValidCreation()) {
             User user = Objects.requireNonNull(constructUser(request));
@@ -53,13 +53,13 @@ public class UserService implements IService<UserDto, UserRequest> {
             return user.getId();
         }
 
-        throw new ValidationException();
+        throw new ValidationException(validator.getErrors());
     }
 
     public UserDto update(@NonNull Long id, UserRequest request){
-        var validator = new UserValidator(request, repository);
+        UserValidator validator = new UserValidator(request, repository);
 
-        if (!validator.isValid()) throw new ValidationException();
+        if (!validator.isValid()) throw new ValidationException(validator.getErrors());
 
         User user = repository.findById(id).orElseThrow(UserNotFoundException::new);
         Objects.requireNonNull(user);

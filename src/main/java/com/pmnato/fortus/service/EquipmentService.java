@@ -35,8 +35,9 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
         }
 
         public Long save(EquipmentRequest request) {
-            if (!new EquipmentValidator(request).isValidCreation()) {
-                throw new ValidationException();
+            EquipmentValidator validator = new EquipmentValidator(request);
+            if (!validator.isValidCreation()) {
+                throw new ValidationException(validator.getErrors());
             }
 
             Equipment equipment = new Equipment(
@@ -51,8 +52,9 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
         }
 
         public EquipmentDto update(@NonNull Long id, EquipmentRequest request){
-            if (!new EquipmentValidator(request).isValid()) {
-                throw new ValidationException();
+            EquipmentValidator validator = new EquipmentValidator(request);
+            if (!validator.isValid()) {
+                throw new ValidationException(validator.getErrors());
             }
 
             Equipment equipment = repository.findById(id).orElseThrow(EquipmentNotFoundException::new);

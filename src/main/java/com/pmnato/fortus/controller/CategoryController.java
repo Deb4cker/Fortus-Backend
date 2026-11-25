@@ -3,6 +3,7 @@ package com.pmnato.fortus.controller;
 import com.pmnato.fortus.dto.CategoryDto;
 import com.pmnato.fortus.service.CategoryService;
 import com.pmnato.fortus.service.request.CategoryRequest;
+import com.pmnato.fortus.service.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,31 +20,31 @@ public class CategoryController extends BaseController<CategoryDto, CategoryRequ
 
     @Override
     @GetMapping(ALL)
-    public ResponseEntity<List<CategoryDto>> getAll(){
+    public ResponseEntity<ApiResponse<List<CategoryDto>>> getAll(){
         return super.getAll();
     }
 
     @Override
     @PostMapping(CREATE)
-    public ResponseEntity<Long> create(@RequestBody CategoryRequest request) {
+    public ResponseEntity<ApiResponse<Long>> create(@RequestBody CategoryRequest request) {
        return super.create(request);
     }
 
     @Override
     @GetMapping(ID)
-    public ResponseEntity<CategoryDto> getById(@PathVariable long id) {
+    public ResponseEntity<ApiResponse<CategoryDto>> getById(@PathVariable long id) {
         return super.getById(id);
     }
     
     @Override
     @PutMapping(EDIT)
-    public ResponseEntity<CategoryDto> edit(@PathVariable Long id, @RequestBody CategoryRequest request) {
+    public ResponseEntity<ApiResponse<CategoryDto>> edit(@PathVariable Long id, @RequestBody CategoryRequest request) {
         return super.edit(id, request);
     }
 
     @Override
     @DeleteMapping(DELETE)
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         return super.delete(id);
     }
 }

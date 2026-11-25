@@ -1,6 +1,5 @@
 package com.pmnato.fortus.service.validator;
 
-import com.pmnato.fortus.exception.validation.EmptyFieldException;
 import com.pmnato.fortus.service.request.CategoryRequest;
 
 public class CategoryValidator extends AbstractValidator<CategoryRequest> {
@@ -16,14 +15,15 @@ public class CategoryValidator extends AbstractValidator<CategoryRequest> {
 
     @Override
     public boolean isValid() {
-        return requestIsPresent() && nameIsValid();
+        resetErrors();
+        if (!requestIsPresent()) return false;
+        return nameIsValid();
     }
 
     private boolean nameIsValid() {
-        return executePredicate(
+        return check(
                 request.name() != null && !request.name().isBlank(),
-                EmptyFieldException.class,
-                "name"
+                "The field name is empty."
         );
     }
 }

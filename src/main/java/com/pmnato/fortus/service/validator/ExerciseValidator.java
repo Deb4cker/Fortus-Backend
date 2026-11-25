@@ -1,7 +1,5 @@
 package com.pmnato.fortus.service.validator;
 
-import com.pmnato.fortus.exception.validation.EmptyFieldException;
-import com.pmnato.fortus.exception.validation.ValidationException;
 import com.pmnato.fortus.service.request.ExerciseRequest;
 
 public class ExerciseValidator extends AbstractValidator<ExerciseRequest> {
@@ -17,41 +15,39 @@ public class ExerciseValidator extends AbstractValidator<ExerciseRequest> {
 
     @Override
     public boolean isValid() {
-        return requestIsPresent()
-                && nameIsValid()
-                && repetitionsAreValid()
-                && difficultyIsValid()
-                && categoryIdIsValid();
+        resetErrors();
+        if (!requestIsPresent()) return false;
+        boolean valid = nameIsValid();
+        valid &= repetitionsAreValid();
+        valid &= difficultyIsValid();
+        valid &= categoryIdIsValid();
+        return valid;
     }
 
     private boolean nameIsValid() {
-        return executePredicate(
+        return check(
                 request.name() != null && !request.name().isBlank(),
-                EmptyFieldException.class,
-                "name"
+                "The field name is empty."
         );
     }
 
     private boolean repetitionsAreValid() {
-        return executePredicate(
+        return check(
                 request.repetitions() > 0,
-                ValidationException.class,
                 "Repetitions must be greater than zero."
         );
     }
 
     private boolean difficultyIsValid() {
-        return executePredicate(
+        return check(
                 request.difficultyLevel() != null,
-                EmptyFieldException.class,
-                "difficultyLevel"
+                "The field difficultyLevel is empty."
         );
     }
 
     private boolean categoryIdIsValid() {
-        return executePredicate(
+        return check(
                 request.categoryId() != null && request.categoryId() > 0,
-                ValidationException.class,
                 "A valid categoryId is required."
         );
     }

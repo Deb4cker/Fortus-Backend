@@ -2,37 +2,51 @@ package com.pmnato.fortus.service.validator;
 
 import com.pmnato.fortus._enum.DayOfWeek;
 import com.pmnato.fortus._enum.Difficulty;
-import com.pmnato.fortus.exception.validation.EmptyFieldException;
-import com.pmnato.fortus.exception.validation.ValidationException;
+import com.pmnato.fortus.repository.UserRepository;
 import com.pmnato.fortus.service.request.CategoryRequest;
 import com.pmnato.fortus.service.request.EquipmentRequest;
 import com.pmnato.fortus.service.request.ExerciseRequest;
 import com.pmnato.fortus.service.request.TrainingRequest;
+import com.pmnato.fortus.service.request.UserRequest;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EntityValidatorTest {
 
     @Test
     void categoryValidatorRequiresANameAndAllowsAnEmptyImageUrl() {
-        assertTrue(new CategoryValidator(new CategoryRequest("Strength", "")).isValid());
-        assertThrows(EmptyFieldException.class,
-                () -> new CategoryValidator(new CategoryRequest(" ", "")).isValid());
+        CategoryValidator validValidator = new CategoryValidator(new CategoryRequest("Strength", ""));
+        assertTrue(validValidator.isValid());
+
+        CategoryValidator invalidValidator = new CategoryValidator(new CategoryRequest(" ", ""));
+        assertFalse(invalidValidator.isValid());
+        assertEquals(List.of("The field name is empty."), invalidValidator.getErrors());
     }
 
     @Test
     void equipmentValidatorRequiresANameAndNonNegativeFiniteWeight() {
-        assertTrue(new EquipmentValidator(new EquipmentRequest("Dumbbell", 5, "")).isValid());
-        assertThrows(EmptyFieldException.class,
-                () -> new EquipmentValidator(new EquipmentRequest("", 5, "")).isValid());
-        assertThrows(ValidationException.class,
-                () -> new EquipmentValidator(new EquipmentRequest("Dumbbell", -1, "")).isValid());
-        assertThrows(ValidationException.class,
-                () -> new EquipmentValidator(new EquipmentRequest("Dumbbell", Double.NaN, "")).isValid());
+        EquipmentValidator validValidator = new EquipmentValidator(new EquipmentRequest("Dumbbell", 5, ""));
+        assertTrue(validValidator.isValid());
+
+        EquipmentValidator invalidValidator = new EquipmentValidator(new EquipmentRequest("", -1, ""));
+        assertFalse(invalidValidator.isValid());
+        assertEquals(List.of(
+                "The field name is empty.",
+                "Weight must be a finite, non-negative number."
+        ), invalidValidator.getErrors());
+
+        EquipmentValidator notANumberValidator = new EquipmentValidator(
+                new EquipmentRequest("Dumbbell", Double.NaN, "")
+        );
+        assertFalse(notANumberValidator.isValid());
+        assertEquals(1, notANumberValidator.getErrors().size());
     }
 
     @Test
@@ -42,15 +56,17 @@ class EntityValidatorTest {
         );
         assertTrue(new ExerciseValidator(validRequest).isValid());
 
-        assertThrows(ValidationException.class, () -> new ExerciseValidator(
+        ExerciseValidator invalidValidator = new ExerciseValidator(
                 new ExerciseRequest("Push-up", 0, Difficulty.MEDIUM, "30 seconds", "", "", 1L)
-        ).isValid());
-        assertThrows(ValidationException.class, () -> new ExerciseValidator(
-                new ExerciseRequest("Push-up", 12, Difficulty.MEDIUM, "30 seconds", "", "", null)
-        ).isValid());
-        assertThrows(EmptyFieldException.class, () -> new ExerciseValidator(
-                new ExerciseRequest("Push-up", 12, null, "30 seconds", "", "", 1L)
-        ).isValid());
+        );
+        assertFalse(invalidValidator.isValid());
+        assertEquals(List.of("Repetitions must be greater than zero."), invalidValidator.getErrors());
+
+        ExerciseValidator multipleErrorsValidator = new ExerciseValidator(
+                new ExerciseRequest("", 0, null, "30 seconds", "", "", null)
+        );
+        assertFalse(multipleErrorsValidator.isValid());
+        assertEquals(4, multipleErrorsValidator.getErrors().size());
     }
 
     @Test
@@ -60,11 +76,27 @@ class EntityValidatorTest {
         );
         assertTrue(new TrainingValidator(validRequest).isValid());
 
-        assertThrows(EmptyFieldException.class, () -> new TrainingValidator(
+        TrainingValidator invalidValidator = new TrainingValidator(
                 new TrainingRequest("", LocalDate.of(2026, 11, 25), false, 0, DayOfWeek.WEDNESDAY)
-        ).isValid());
-        assertThrows(ValidationException.class, () -> new TrainingValidator(
-                new TrainingRequest("Strength session", LocalDate.of(2026, 11, 25), false, -1, DayOfWeek.WEDNESDAY)
-        ).isValid());
+        );
+        assertFalse(invalidValidator.isValid());
+        assertEquals(List.of("The field description is empty."), invalidValidator.getErrors());
+
+        TrainingValidator multipleErrorsValidator = new TrainingValidator(
+                new TrainingRequest("", null, false, -1, null)
+        );
+        assertFalse(multipleErrorsValidator.isValid());
+        assertEquals(4, multipleErrorsValidator.getErrors().size());
+    }
+
+    @Test
+    void userValidatorCollectsAllIndependentErrors() {
+        UserValidator validator = new UserValidator(
+                new UserRequest("", null, "", "invalid-email", "123", "different"),
+                mock(UserRepository.class)
+        );
+
+        assertFalse(validator.isValidCreation());
+        assertEquals(4, validator.getErrors().size());
     }
 }

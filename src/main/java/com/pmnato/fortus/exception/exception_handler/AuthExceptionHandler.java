@@ -3,12 +3,15 @@ package com.pmnato.fortus.exception.exception_handler;
 import com.pmnato.fortus.exception.ApplicationException;
 import com.pmnato.fortus.exception.auth_exception.AuthException;
 import com.pmnato.fortus.exception.auth_exception.PasswordDoesNotMatchException;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class AuthExceptionHandler extends ApplicationExceptionHandler
 {
     @ExceptionHandler(AuthException.class)
@@ -23,9 +26,6 @@ public class AuthExceptionHandler extends ApplicationExceptionHandler
 
     @Override
     protected ResponseEntity<Object> treatedResponse(ApplicationException exception, Object cause) {
-        return getObjectResponseEntity(
-                exception.getMessage(),
-                cause,
-                HttpStatus.UNAUTHORIZED);
+        return getObjectResponseEntity(cause, HttpStatus.UNAUTHORIZED);
     }
 }

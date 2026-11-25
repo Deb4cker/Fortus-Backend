@@ -1,18 +1,14 @@
 package com.pmnato.fortus.service.validator;
 
-import com.pmnato.fortus.exception.validation.ValidationException;
 import com.pmnato.fortus.service.request.Request;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbstractValidator<R extends Request> implements Validator<R> {
 
     protected R request;
-    protected static final Logger logger = LogManager.getLogger(AbstractValidator.class);
+    private final List<String> errors = new ArrayList<>();
 
     protected AbstractValidator(R request) {
         this.request = request;
@@ -23,33 +19,23 @@ public abstract class AbstractValidator<R extends Request> implements Validator<
         this.request = request;
     }
 
-    protected boolean requestIsPresent() {
-        return executePredicate(
-                request != null,
-                ValidationException.class,
-                "Request must not be null."
-        );
+    @Override
+    public List<String> getErrors() {
+        return List.copyOf(errors);
     }
 
-    protected <E extends ValidationException> boolean executePredicate(
-            boolean condition,
-            Class<E> exception,
-            Object... args
-    ) {
-        if (condition) return true;
+    protected void resetErrors() {
+        errors.clear();
+    }
 
-        try {
-            Class<?>[] parameterTypes = Arrays.stream(args)
-                    .map(arg -> arg == null ? Object.class : arg.getClass())
-                    .toArray(Class<?>[]::new);
+    protected boolean requestIsPresent() {
+        return check(request != null, "Request must not be null.");
+    }
 
-            Constructor<E> constructor = exception.getConstructor(parameterTypes);
-            throw constructor.newInstance(args);
-        } catch (NoSuchMethodException | InvocationTargetException
-                | InstantiationException | IllegalAccessException ex) {
-            logger.error("Unable to execute validation predicate", ex);
+    protected boolean check(boolean condition, String error) {
+        if (!condition) {
+            errors.add(error);
         }
-
-        return false;
+        return condition;
     }
 }

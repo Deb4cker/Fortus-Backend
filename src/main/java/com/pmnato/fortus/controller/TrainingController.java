@@ -3,6 +3,7 @@ package com.pmnato.fortus.controller;
 import com.pmnato.fortus.dto.TrainingDto;
 import com.pmnato.fortus.service.TrainingService;
 import com.pmnato.fortus.service.request.TrainingRequest;
+import com.pmnato.fortus.service.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,31 +20,31 @@ public class TrainingController extends BaseController<TrainingDto, TrainingRequ
 
     @Override
     @GetMapping(ALL)
-    public ResponseEntity<List<TrainingDto>> getAll() {
+    public ResponseEntity<ApiResponse<List<TrainingDto>>> getAll() {
         return super.getAll();
     }
 
     @Override
     @GetMapping(ID)
-    public ResponseEntity<TrainingDto> getById(@PathVariable long id) {
+    public ResponseEntity<ApiResponse<TrainingDto>> getById(@PathVariable long id) {
         return super.getById(id);
     }
 
     @Override
     @PostMapping(CREATE)
-    public ResponseEntity<Long> create(@RequestBody TrainingRequest request) {
+    public ResponseEntity<ApiResponse<Long>> create(@RequestBody TrainingRequest request) {
         return super.create(request);
     }
 
     @Override
     @PutMapping(EDIT)
-    public ResponseEntity<TrainingDto> edit(@PathVariable Long id, @RequestBody TrainingRequest request) {
+    public ResponseEntity<ApiResponse<TrainingDto>> edit(@PathVariable Long id, @RequestBody TrainingRequest request) {
         return super.edit(id, request);
     }
 
     @Override
     @DeleteMapping(DELETE)
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         return super.delete(id);
     }
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.pmnato.fortus.dto.UserDto;
 import com.pmnato.fortus.service.UserService;
-import org.springframework.http.HttpStatus;
+import com.pmnato.fortus.service.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.pmnato.fortus.service.request.UserRequest;
@@ -20,39 +20,39 @@ public class UserController extends BaseController<UserDto, UserRequest>
 
     @Override
     @PostMapping(CREATE)
-    public ResponseEntity<Long> create(@RequestBody UserRequest request) {
+    public ResponseEntity<ApiResponse<Long>> create(@RequestBody UserRequest request) {
         return super.create(request);
     }
 
     @Override
     @GetMapping(ALL)
-    public ResponseEntity<List<UserDto>> getAll() {
+    public ResponseEntity<ApiResponse<List<UserDto>>> getAll() {
         return super.getAll();
     }
 
     @Override
     @GetMapping(ID)
-    public ResponseEntity<UserDto> getById(@PathVariable long id) {
+    public ResponseEntity<ApiResponse<UserDto>> getById(@PathVariable long id) {
         return super.getById(id);
     }
 
     @Override
     @PutMapping(EDIT)
-    public ResponseEntity<UserDto> edit(@PathVariable Long id, @RequestBody UserRequest request) {
+    public ResponseEntity<ApiResponse<UserDto>> edit(@PathVariable Long id, @RequestBody UserRequest request) {
         return super.edit(id, request);
     }
 
     @Override
     @DeleteMapping(DELETE)
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<Void>> delete(@PathVariable Long id) {
         return super.delete(id);
     }
 
     @PostMapping(LOGIN)
-    public ResponseEntity<UserDto> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<ApiResponse<UserDto>> login(@RequestBody LoginRequest request) {
         UserService service = (UserService) this.service;
 
         var result = service.login(request.email(), request.password());
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return ResponseEntity.ok(new ApiResponse<>(result));
     }
 }

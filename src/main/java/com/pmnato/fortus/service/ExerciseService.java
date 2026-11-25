@@ -39,9 +39,10 @@ public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
         return mapToDto(exercise);
     }
 
-    public Long save(@NonNull ExerciseRequest request) {
-        if (!new ExerciseValidator(request).isValidCreation()) {
-            throw new ValidationException();
+    public Long save(ExerciseRequest request) {
+        ExerciseValidator validator = new ExerciseValidator(request);
+        if (!validator.isValidCreation()) {
+            throw new ValidationException(validator.getErrors());
         }
 
         Long categoryId = Objects.requireNonNull(request.categoryId());
@@ -65,8 +66,9 @@ public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
     }
 
     public ExerciseDto update(@NonNull Long id, ExerciseRequest request){
-        if (!new ExerciseValidator(request).isValid()) {
-            throw new ValidationException();
+        ExerciseValidator validator = new ExerciseValidator(request);
+        if (!validator.isValid()) {
+            throw new ValidationException(validator.getErrors());
         }
 
         Exercise exercise = repository.findById(id).orElseThrow(ExerciseNotFoundException::new);
