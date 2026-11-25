@@ -33,11 +33,12 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
 
         public Long save(EquipmentRequest request) {
             Equipment equipment = new Equipment(
-                    request.id(),
+                    null,
                     request.name(),
                     request.weight(),
                     request.imageUrl()
             );
+            
             Long id = repository.save(equipment).getId();
             return id;
         }
@@ -65,7 +66,6 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
         }
 
         private void setData (Equipment equipment, EquipmentRequest request){
-            equipment.setId(request.id());
             equipment.setName(request.name());
             equipment.setWeight(request.weight());
             equipment.setImageUrl(request.imageUrl());
