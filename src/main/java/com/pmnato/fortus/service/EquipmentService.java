@@ -4,8 +4,10 @@ import com.pmnato.fortus.commons._interface.IService;
 import com.pmnato.fortus.dto.EquipmentDto;
 import com.pmnato.fortus.entity.Equipment;
 import com.pmnato.fortus.exception.not_found.EquipmentNotFoundException;
+import com.pmnato.fortus.exception.validation.ValidationException;
 import com.pmnato.fortus.repository.EquipmentRepository;
 import com.pmnato.fortus.service.request.EquipmentRequest;
+import com.pmnato.fortus.service.validator.EquipmentValidator;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
@@ -13,6 +15,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -32,6 +35,10 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
         }
 
         public Long save(EquipmentRequest request) {
+            if (!new EquipmentValidator(request).isValidCreation()) {
+                throw new ValidationException();
+            }
+
             Equipment equipment = new Equipment(
                     null,
                     request.name(),
@@ -44,8 +51,13 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
         }
 
         public EquipmentDto update(@NonNull Long id, EquipmentRequest request){
-            Equipment equipment = repository.getReferenceById(id);
+            if (!new EquipmentValidator(request).isValid()) {
+                throw new ValidationException();
+            }
+
+            Equipment equipment = repository.findById(id).orElseThrow(EquipmentNotFoundException::new);
             setData(equipment, request);
+            Objects.requireNonNull(equipment);
             repository.save(equipment);
             
             return mapToDto(equipment);

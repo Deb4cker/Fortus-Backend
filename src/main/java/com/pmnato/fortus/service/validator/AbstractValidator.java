@@ -23,6 +23,14 @@ public abstract class AbstractValidator<R extends Request> implements Validator<
         this.request = request;
     }
 
+    protected boolean requestIsPresent() {
+        return executePredicate(
+                request != null,
+                ValidationException.class,
+                "Request must not be null."
+        );
+    }
+
     protected <E extends ValidationException> boolean executePredicate(
             boolean condition,
             Class<E> exception,

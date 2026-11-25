@@ -23,7 +23,11 @@ public class UserValidator extends AbstractValidator<UserRequest> {
 
     @Override
     public boolean isValid() {
-        return nameIsValid(request.firstName()) && nameIsValid(request.lastName())  && emailIsValid() && passwordIsValid();
+        return requestIsPresent()
+                && nameIsValid(request.firstName())
+                && nameIsValid(request.lastName())
+                && emailIsValid()
+                && passwordIsValid();
     }
 
     private boolean nameIsValid(String name) {

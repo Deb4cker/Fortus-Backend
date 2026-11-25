@@ -4,14 +4,18 @@ import com.pmnato.fortus.commons._interface.IService;
 import com.pmnato.fortus.dto.ExerciseDto;
 import com.pmnato.fortus.entity.Category;
 import com.pmnato.fortus.entity.Exercise;
+import com.pmnato.fortus.exception.validation.ValidationException;
 import com.pmnato.fortus.repository.CategoryRepository;
 import com.pmnato.fortus.repository.ExerciseRepository;
 import com.pmnato.fortus.service.request.ExerciseRequest;
+import com.pmnato.fortus.service.validator.ExerciseValidator;
 
 import lombok.NonNull;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+
+import com.pmnato.fortus.exception.not_found.CategoryNotFoundException;
 import com.pmnato.fortus.exception.not_found.ExerciseNotFoundException;
 
 import java.util.ArrayList;
@@ -36,8 +40,12 @@ public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
     }
 
     public Long save(@NonNull ExerciseRequest request) {
+        if (!new ExerciseValidator(request).isValidCreation()) {
+            throw new ValidationException();
+        }
+
         Long categoryId = Objects.requireNonNull(request.categoryId());
-        Category category = categoryRepository.findById(categoryId).get();
+        Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
 
         Exercise exercise = new Exercise(
                 null,
@@ -57,8 +65,13 @@ public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
     }
 
     public ExerciseDto update(@NonNull Long id, ExerciseRequest request){
-        Exercise exercise = repository.getReferenceById(id);
+        if (!new ExerciseValidator(request).isValid()) {
+            throw new ValidationException();
+        }
+
+        Exercise exercise = repository.findById(id).orElseThrow(ExerciseNotFoundException::new);
         setData(exercise, request);
+        Objects.requireNonNull(exercise);
         repository.save(exercise);
         
         return mapToDto(exercise);

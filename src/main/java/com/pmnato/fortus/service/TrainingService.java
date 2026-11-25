@@ -4,8 +4,10 @@ import com.pmnato.fortus.commons._interface.IService;
 import com.pmnato.fortus.dto.TrainingDto;
 import com.pmnato.fortus.entity.Training;
 import com.pmnato.fortus.exception.not_found.TrainingNotFoundException;
+import com.pmnato.fortus.exception.validation.ValidationException;
 import com.pmnato.fortus.repository.TrainingRepository;
 import com.pmnato.fortus.service.request.TrainingRequest;
+import com.pmnato.fortus.service.validator.TrainingValidator;
 
 import lombok.NonNull;
 import lombok.AllArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -31,6 +34,10 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
     }
     
     public Long save(TrainingRequest request) {
+        if (!new TrainingValidator(request).isValidCreation()) {
+            throw new ValidationException();
+        }
+
         Training training = new Training(
                 null,
                 request.description(),
@@ -45,8 +52,13 @@ public class TrainingService implements IService<TrainingDto, TrainingRequest> {
     }
 
     public TrainingDto update(@NonNull Long id, TrainingRequest request){
-        Training training = repository.getReferenceById(id);
+        if (!new TrainingValidator(request).isValid()) {
+            throw new ValidationException();
+        }
+
+        Training training = repository.findById(id).orElseThrow(TrainingNotFoundException::new);
         setData(training, request);
+        Objects.requireNonNull(training);
         repository.save(training);
         
         return mapToDto(training);

@@ -4,8 +4,10 @@ import com.pmnato.fortus.commons._interface.IService;
 import com.pmnato.fortus.dto.CategoryDto;
 import com.pmnato.fortus.entity.Category;
 import com.pmnato.fortus.exception.not_found.CategoryNotFoundException;
+import com.pmnato.fortus.exception.validation.ValidationException;
 import com.pmnato.fortus.repository.CategoryRepository;
 import com.pmnato.fortus.service.request.CategoryRequest;
+import com.pmnato.fortus.service.validator.CategoryValidator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import lombok.NonNull;
 
@@ -35,6 +38,10 @@ public class CategoryService implements IService<CategoryDto, CategoryRequest>
     }
 
     public Long save(CategoryRequest request) {
+        if (!new CategoryValidator(request).isValidCreation()) {
+            throw new ValidationException();
+        }
+
         Category Category = new Category(
                 null,
                 request.name(),
@@ -47,8 +54,13 @@ public class CategoryService implements IService<CategoryDto, CategoryRequest>
     }
 
     public CategoryDto update(@NonNull Long id, CategoryRequest request) {
+        if (!new CategoryValidator(request).isValid()) {
+            throw new ValidationException();
+        }
+
         Category category = repository.findById(id).orElseThrow(CategoryNotFoundException::new);
         setData(category, request);
+        Objects.requireNonNull(category);
         repository.save(category);
         
         return mapToDto(category);
