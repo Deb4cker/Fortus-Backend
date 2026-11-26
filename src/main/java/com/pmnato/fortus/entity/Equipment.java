@@ -5,7 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import static com.pmnato.fortus.commons.constants.JoinColumns.EXERCISE_ID;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,10 +21,14 @@ public class Equipment
     private double weight;
     private String imageUrl;
 
-    @ManyToOne
-    @JoinColumn(name = EXERCISE_ID, nullable = false)
-    private Exercise exercise;
+    @OneToMany(mappedBy = "equipment", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ExerciseEquipment> exerciseEquipments;
 
-    public Equipment(Long id, String name, double weight, String s) {
+    public Equipment(Long id, String name, double weight, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.weight = weight;
+        this.imageUrl = imageUrl;
+        this.exerciseEquipments = new ArrayList<>();
     }
 }

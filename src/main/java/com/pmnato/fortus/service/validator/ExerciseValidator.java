@@ -21,6 +21,7 @@ public class ExerciseValidator extends AbstractValidator<ExerciseRequest> {
         valid &= repetitionsAreValid();
         valid &= difficultyIsValid();
         valid &= categoryIdIsValid();
+        valid &= equipmentIdsAreValid();
         return valid;
     }
 
@@ -49,6 +50,14 @@ public class ExerciseValidator extends AbstractValidator<ExerciseRequest> {
         return check(
                 request.categoryId() != null && request.categoryId() > 0,
                 "A valid categoryId is required."
+        );
+    }
+
+    private boolean equipmentIdsAreValid() {
+        return check(
+                request.equipmentIds() == null
+                        || request.equipmentIds().stream().allMatch(id -> id != null && id > 0),
+                "Each equipmentId must be a positive number."
         );
     }
 }

@@ -18,6 +18,9 @@ public class TrainingExercise
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private Integer sets;
+    private Integer exerciseOrder;
+
     @ManyToOne
     @JoinColumn(name = TRAINING_ID, nullable = false)
     private Training training;

@@ -52,21 +52,31 @@ class EntityValidatorTest {
     @Test
     void exerciseValidatorRequiresNameDifficultyRepetitionsAndCategory() {
         ExerciseRequest validRequest = new ExerciseRequest(
-                "Push-up", 12, Difficulty.MEDIUM, "30 seconds", "", "", 1L
+                "Push-up", 12, Difficulty.MEDIUM, "30 seconds", "", "", 1L, List.of(1L, 2L)
         );
         assertTrue(new ExerciseValidator(validRequest).isValid());
+        assertTrue(new ExerciseValidator(
+                new ExerciseRequest("Push-up", 12, Difficulty.MEDIUM, "30 seconds", "", "", 1L, null)
+        ).isValid());
 
         ExerciseValidator invalidValidator = new ExerciseValidator(
-                new ExerciseRequest("Push-up", 0, Difficulty.MEDIUM, "30 seconds", "", "", 1L)
+                new ExerciseRequest("Push-up", 0, Difficulty.MEDIUM, "30 seconds", "", "", 1L, null)
         );
         assertFalse(invalidValidator.isValid());
         assertEquals(List.of("Repetitions must be greater than zero."), invalidValidator.getErrors());
 
         ExerciseValidator multipleErrorsValidator = new ExerciseValidator(
-                new ExerciseRequest("", 0, null, "30 seconds", "", "", null)
+                new ExerciseRequest("", 0, null, "30 seconds", "", "", null, null)
         );
         assertFalse(multipleErrorsValidator.isValid());
         assertEquals(4, multipleErrorsValidator.getErrors().size());
+
+        ExerciseValidator invalidEquipmentIdsValidator = new ExerciseValidator(
+                new ExerciseRequest("Push-up", 12, Difficulty.MEDIUM, "30 seconds", "", "", 1L, List.of(0L))
+        );
+        assertFalse(invalidEquipmentIdsValidator.isValid());
+        assertEquals(List.of("Each equipmentId must be a positive number."),
+                invalidEquipmentIdsValidator.getErrors());
     }
 
     @Test

@@ -2,6 +2,8 @@ package com.pmnato.fortus.service.request;
 
 import com.pmnato.fortus._enum.Difficulty;
 
+import java.util.List;
+
 public record ExerciseRequest (
         String name,
         int repetitions,
@@ -9,5 +11,6 @@ public record ExerciseRequest (
         String suggestedTime,
         String imageUrl,
         String VideoUrl,
-        Long categoryId
+        Long categoryId,
+        List<Long> equipmentIds
 ) implements Request{}
