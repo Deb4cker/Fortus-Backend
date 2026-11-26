@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -24,7 +25,7 @@ class GlobalExceptionHandlerTest {
         );
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        ApiErrorResponse body = (ApiErrorResponse) response.getBody();
+        ApiErrorResponse body = (ApiErrorResponse) Objects.requireNonNull(response.getBody());
         assertEquals("VALIDATION_ERROR", body.code());
         assertEquals(2, body.errors().size());
         assertEquals("O campo nome está vazio.", body.errors().get(0).message());
@@ -43,7 +44,7 @@ class GlobalExceptionHandlerTest {
                 .handleUnexpectedException(new IllegalStateException("Unexpected failure"));
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        ApiErrorResponse body = (ApiErrorResponse) response.getBody();
+        ApiErrorResponse body = (ApiErrorResponse) Objects.requireNonNull(response.getBody());
         assertEquals("INTERNAL_SERVER_ERROR", body.code());
         assertEquals(500, body.status());
         assertTrue(body.errors().isEmpty());
@@ -55,7 +56,7 @@ class GlobalExceptionHandlerTest {
                 .handleNullPointerException(new NullPointerException("Missing input"));
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        ApiErrorResponse body = (ApiErrorResponse) response.getBody();
+        ApiErrorResponse body = (ApiErrorResponse) Objects.requireNonNull(response.getBody());
         assertEquals("BAD_REQUEST", body.code());
         assertEquals("Dados inválidos", body.title());
     }

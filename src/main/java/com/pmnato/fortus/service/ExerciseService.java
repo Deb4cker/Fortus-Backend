@@ -25,6 +25,7 @@ import com.pmnato.fortus.exception.not_found.ExerciseNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,7 +53,8 @@ public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
             throw new ValidationException(validator.getErrors());
         }
 
-        Category category = categoryRepository.findById(request.categoryId())
+        Long categoryId = Objects.requireNonNull(request.categoryId());
+        Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(CategoryNotFoundException::new);
         List<Equipment> equipments = findEquipments(request.equipmentIds());
 
@@ -80,9 +82,9 @@ public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
             throw new ValidationException(validator.getErrors());
         }
 
+        Long categoryId = Objects.requireNonNull(request.categoryId());
         Exercise exercise = repository.findById(id).orElseThrow(ExerciseNotFoundException::new);
-        Category category = categoryRepository.findById(request.categoryId())
-                .orElseThrow(CategoryNotFoundException::new);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
         setData(exercise, request);
         exercise.setCategory(category);
         if (request.equipmentIds() != null) {
@@ -98,6 +100,7 @@ public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
     @Transactional
     public void delete(@NonNull Long id) {
         Exercise exercise = repository.findById(id).orElseThrow(ExerciseNotFoundException::new);
+        Objects.requireNonNull(exercise);
         repository.delete(exercise);
     }
 
@@ -127,9 +130,17 @@ public class ExerciseService implements IService<ExerciseDto, ExerciseRequest> {
             return List.of();
         }
 
-        List<Long> distinctIds = equipmentIds.stream().distinct().toList();
+        List<Long> distinctIds = equipmentIds.stream()
+            .distinct()
+            .toList();
+
+        Objects.requireNonNull(distinctIds);
+
         Map<Long, Equipment> equipmentsById = equipmentRepository.findAllById(distinctIds).stream()
-                .collect(Collectors.toMap(Equipment::getId, equipment -> equipment, (first, ignored) -> first));
+            .collect(Collectors.toMap(
+                equipment -> java.util.Objects.requireNonNull(equipment).getId(),
+                equipment -> equipment,
+                (first, ignored) -> first));
 
         if (equipmentsById.size() != distinctIds.size()) {
             throw new EquipmentNotFoundException();

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -59,6 +60,8 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
 
             Equipment equipment = repository.findById(id).orElseThrow(EquipmentNotFoundException::new);
             setData(equipment, request);
+
+            Objects.requireNonNull(equipment);
             repository.save(equipment);
             
             return mapToDto(equipment);
@@ -67,6 +70,8 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
         @Transactional
         public void delete(@NonNull Long id) {
             Equipment equipment = repository.findById(id).orElseThrow(EquipmentNotFoundException::new);
+            
+            Objects.requireNonNull(equipment);
             repository.delete(equipment);
         }
 

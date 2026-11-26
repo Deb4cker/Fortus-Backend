@@ -39,7 +39,8 @@ class ExerciseServiceTest {
         Equipment equipment = new Equipment(12L, "Barbell", 20, "", new ArrayList<>());
 
         when(categoryRepository.findById(3L)).thenReturn(Optional.of(category));
-        when(equipmentRepository.findAllById(List.of(12L))).thenReturn(List.of(equipment));
+        Iterable<Long> equipmentIds = List.of(12L);
+        when(equipmentRepository.findAllById(equipmentIds)).thenReturn(List.of(equipment));
         when(exerciseRepository.save(any(Exercise.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
 

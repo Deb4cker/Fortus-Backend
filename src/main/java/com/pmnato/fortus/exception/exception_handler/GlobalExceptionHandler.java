@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.pmnato.fortus.service.response.ApiErrorResponse;
 
+import lombok.NonNull;
+
 import java.util.List;
 
 @RestControllerAdvice
@@ -35,7 +37,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    private ResponseEntity<Object> response(String detail, String code, HttpStatus status, List<String> errors) {
+    private ResponseEntity<Object> response(String detail, String code, @NonNull HttpStatus status, List<String> errors) {
         return new ResponseEntity<>(ApiErrorResponse.of(status, detail, code, errors), status);
     }
 }
