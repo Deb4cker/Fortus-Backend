@@ -43,6 +43,6 @@ public class UserValidationExceptionHandler extends ApplicationExceptionHandler
                 exception instanceof ValidationException validationException
                         ? validationException.getErrors()
                         : cause,
-                HttpStatus.FORBIDDEN);
+                HttpStatus.BAD_REQUEST);
     }
 }

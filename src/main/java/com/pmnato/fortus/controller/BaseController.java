@@ -17,7 +17,7 @@ public abstract class BaseController<TDto extends Dto, TRequest extends Request>
     protected final IService<TDto, TRequest> service;
 
     public ResponseEntity<ApiResponse<List<TDto>>> getAll(){
-        return ResponseEntity.ok(new ApiResponse<>(service.findAll()));
+        return ResponseEntity.ok(ApiResponse.collection(service.findAll()));
     }
 
     public ResponseEntity<ApiResponse<TDto>> getById(@PathVariable long id) {

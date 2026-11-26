@@ -7,7 +7,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.pmnato.fortus.service.response.ApiResponse;
+import com.pmnato.fortus.service.response.ApiErrorResponse;
+
+import java.util.List;
 
 @RestControllerAdvice
 @Order(Ordered.LOWEST_PRECEDENCE)
@@ -15,15 +17,25 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NullPointerException.class)
     public ResponseEntity<Object> handleNullPointerException(NullPointerException exception) {
-        return response("Null parameter on args.", HttpStatus.BAD_REQUEST);
+        return response(
+                "Um ou mais campos são inválidos.",
+                "BAD_REQUEST",
+                HttpStatus.BAD_REQUEST,
+                List.of("Null parameter on args.")
+        );
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUnexpectedException(Exception exception) {
-        return response("Server died", HttpStatus.INTERNAL_SERVER_ERROR);
+        return response(
+                "Ocorreu um erro inesperado.",
+                "INTERNAL_SERVER_ERROR",
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                List.of()
+        );
     }
 
-    private ResponseEntity<Object> response(Object data, HttpStatus status) {
-        return new ResponseEntity<>(new ApiResponse<>(data), status);
+    private ResponseEntity<Object> response(String detail, String code, HttpStatus status, List<String> errors) {
+        return new ResponseEntity<>(ApiErrorResponse.of(status, detail, code, errors), status);
     }
 }

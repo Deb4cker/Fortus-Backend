@@ -11,11 +11,10 @@ import com.pmnato.fortus.service.validator.EquipmentValidator;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -34,6 +33,7 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
                 .orElseThrow(EquipmentNotFoundException::new);
         }
 
+        @Transactional
         public Long save(EquipmentRequest request) {
             EquipmentValidator validator = new EquipmentValidator(request);
             if (!validator.isValidCreation()) {
@@ -46,11 +46,11 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
                     request.weight(),
                     request.imageUrl()
             );
-            
-            Long id = repository.save(equipment).getId();
-            return id;
+
+            return repository.save(equipment).getId();
         }
 
+        @Transactional
         public EquipmentDto update(@NonNull Long id, EquipmentRequest request){
             EquipmentValidator validator = new EquipmentValidator(request);
             if (!validator.isValid()) {
@@ -59,18 +59,15 @@ public class EquipmentService implements IService<EquipmentDto, EquipmentRequest
 
             Equipment equipment = repository.findById(id).orElseThrow(EquipmentNotFoundException::new);
             setData(equipment, request);
-            Objects.requireNonNull(equipment);
             repository.save(equipment);
             
             return mapToDto(equipment);
         }
 
+        @Transactional
         public void delete(@NonNull Long id) {
-            try {
-                repository.deleteById(id);
-            } catch (EmptyResultDataAccessException e) {
-                throw new EquipmentNotFoundException();
-            }
+            Equipment equipment = repository.findById(id).orElseThrow(EquipmentNotFoundException::new);
+            repository.delete(equipment);
         }
 
         private EquipmentDto mapToDto(Equipment equipment) {

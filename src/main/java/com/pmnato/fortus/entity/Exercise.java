@@ -32,7 +32,7 @@ public class Exercise
     private List<TrainingExercise> trainingExercises;
 
     @OneToMany(mappedBy = EXERCISE, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Equipment> equipments;
+    private List<ExerciseEquipment> exerciseEquipments;
 
     @ManyToOne
     @JoinColumn(name = CATEGORY_ID)
